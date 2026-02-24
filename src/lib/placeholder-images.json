@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "pilates-reformer",
+      "description": "A person using a pilates reformer machine.",
+      "imageUrl": "https://images.unsplash.com/photo-1747240549807-fc3962949818?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwaWxhdGVzJTIwcmVmb3JtZXJ8ZW58MHx8fHwxNzcxOTA3OTQ5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pilates reformer"
+    },
+    {
+      "id": "gym-workout",
+      "description": "Weights and gym equipment.",
+      "imageUrl": "https://images.unsplash.com/photo-1692369608191-005af0051fe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxneW0lMjB3b3Jrb3V0fGVufDB8fHx8MTc3MTg0OTkzMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gym workout"
+    },
+    {
+      "id": "admin-avatar",
+      "description": "Avatar for admin user",
+      "imageUrl": "https://images.unsplash.com/photo-1531123414780-f74242c2b052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzcxODk0OTA2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "juan-perez-avatar",
+      "description": "Avatar for Juan Perez",
+      "imageUrl": "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzE4OTQyOTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "ana-garcia-avatar",
+      "description": "Avatar for Ana Garcia",
+      "imageUrl": "https://images.unsplash.com/photo-1581403341630-a6e0b9d2d257?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MTgzNTc1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "luis-rodriguez-avatar",
+      "description": "Avatar for Luis Rodriguez",
+      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzE4OTQyOTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "maria-martinez-avatar",
+      "description": "Avatar for Maria Martinez",
+      "imageUrl": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MTgzNTc1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    }
+  ]
 }
