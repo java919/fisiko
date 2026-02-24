@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'WellnessFlow',
-  description: 'Gestiona tu bienestar con facilidad.',
+  title: 'FISIKO',
+  description: 'Tu centro de fisioterapia y bienestar.',
 };
 
 export default function RootLayout({

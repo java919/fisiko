@@ -36,7 +36,7 @@ export function ClientSidebar() {
         <Link href="/dashboard" className="flex items-center gap-2">
           <Logo />
           <span className="font-headline text-lg font-semibold text-sidebar-foreground">
-            WellnessFlow
+            FISIKO
           </span>
         </Link>
       </SidebarHeader>

@@ -11,7 +11,7 @@ export default function LoginPage() {
           <div className="mb-4 flex justify-center">
             <Logo />
           </div>
-          <CardTitle className="font-headline text-2xl">Bienvenido a WellnessFlow</CardTitle>
+          <CardTitle className="font-headline text-2xl">Bienvenido a FISIKO</CardTitle>
           <CardDescription>Inicia sesión para acceder a tu panel</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
