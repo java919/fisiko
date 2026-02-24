@@ -9,53 +9,53 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-headline text-3xl font-bold">Admin Dashboard</h1>
+      <h1 className="font-headline text-3xl font-bold">Panel de Administración</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Clientes</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalClients}</div>
-            <p className="text-xs text-muted-foreground">+2 this month</p>
+            <p className="text-xs text-muted-foreground">+2 este mes</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Services</CardTitle>
+            <CardTitle className="text-sm font-medium">Servicios Activos</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeServices}</div>
-            <p className="text-xs text-muted-foreground">All services are active</p>
+            <p className="text-xs text-muted-foreground">Todos los servicios están activos</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sessions this Month</CardTitle>
+            <CardTitle className="text-sm font-medium">Sesiones este Mes</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{sessionsThisMonth}</div>
-            <p className="text-xs text-muted-foreground">+10% from last month</p>
+            <p className="text-xs text-muted-foreground">+10% desde el mes pasado</p>
           </CardContent>
         </Card>
          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Messages</CardTitle>
+            <CardTitle className="text-sm font-medium">Nuevos Mensajes</CardTitle>
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">From Juan and Ana</p>
+            <p className="text-xs text-muted-foreground">De Juan y Ana</p>
           </CardContent>
         </Card>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">Recent Activity</CardTitle>
+                <CardTitle className="font-headline">Actividad Reciente</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
@@ -65,8 +65,8 @@ export default function AdminDashboard() {
                         return (
                             <div key={session.id} className="flex items-center">
                                 <div className="ml-4 space-y-1">
-                                    <p className="text-sm font-medium leading-none">{client?.name} completed a {service?.name} session.</p>
-                                    <p className="text-sm text-muted-foreground">{session.completedAt.toLocaleDateString()}</p>
+                                    <p className="text-sm font-medium leading-none">{client?.name} completó una sesión de {service?.name}.</p>
+                                    <p className="text-sm text-muted-foreground">{session.completedAt.toLocaleDateString('es-ES')}</p>
                                 </div>
                             </div>
                         )
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
         </Card>
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">Upcoming Appointments</CardTitle>
+                <CardTitle className="font-headline">Próximas Citas</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
                             <div key={slot.id} className="flex items-center">
                                 <div className="ml-4 space-y-1">
                                     <p className="text-sm font-medium leading-none">{client?.name} - {service?.name}</p>
-                                    <p className="text-sm text-muted-foreground">{slot.startTime.toLocaleString([], {dateStyle: 'full', timeStyle: 'short'})}</p>
+                                    <p className="text-sm text-muted-foreground">{slot.startTime.toLocaleString('es-ES', {dateStyle: 'full', timeStyle: 'short'})}</p>
                                 </div>
                             </div>
                         )

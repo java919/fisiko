@@ -9,17 +9,17 @@ export default function HistoryPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-headline text-3xl font-bold">Session History</h1>
-        <p className="text-muted-foreground">A record of all your completed sessions.</p>
+        <h1 className="font-headline text-3xl font-bold">Historial de Sesiones</h1>
+        <p className="text-muted-foreground">Un registro de todas tus sesiones completadas.</p>
       </div>
       <Card>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Service</TableHead>
-                <TableHead>Date Completed</TableHead>
-                <TableHead>Time</TableHead>
+                <TableHead>Servicio</TableHead>
+                <TableHead>Fecha de Finalización</TableHead>
+                <TableHead>Hora</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -28,13 +28,13 @@ export default function HistoryPage() {
                 return (
                   <TableRow key={session.id}>
                     <TableCell className="font-medium">{service?.name}</TableCell>
-                    <TableCell>{session.completedAt.toLocaleDateString()}</TableCell>
+                    <TableCell>{session.completedAt.toLocaleDateString('es-ES')}</TableCell>
                     <TableCell>{session.completedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</TableCell>
                   </TableRow>
                 )
               }) : (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center h-24">You haven't completed any sessions yet.</TableCell>
+                  <TableCell colSpan={3} className="text-center h-24">Todavía no has completado ninguna sesión.</TableCell>
                 </TableRow>
               )}
             </TableBody>

@@ -16,8 +16,8 @@ export default function BookingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-headline text-3xl font-bold">Book a Session</h1>
-        <p className="text-muted-foreground">Select a day and book an available slot.</p>
+        <h1 className="font-headline text-3xl font-bold">Reservar una Sesión</h1>
+        <p className="text-muted-foreground">Selecciona un día y reserva un hueco disponible.</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
@@ -36,7 +36,7 @@ export default function BookingPage() {
         <Card className="lg:col-span-2">
             <CardHeader>
                 <CardTitle className="font-headline">
-                    Available Slots for {date ? date.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'selected date'}
+                    Huecos Disponibles para {date ? date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'la fecha seleccionada'}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -53,15 +53,15 @@ export default function BookingPage() {
                                     </div>
                                 </div>
                                 {slot.isBooked ? (
-                                    <Button disabled variant="outline">Booked</Button>
+                                    <Button disabled variant="outline">Reservado</Button>
                                 ) : (
-                                    <Button><Check className="mr-2 h-4 w-4" />Book</Button>
+                                    <Button><Check className="mr-2 h-4 w-4" />Reservar</Button>
                                 )}
                             </div>
                         )
                     })
                     }
-                    {slotsForSelectedDay.length === 0 && <div className="text-center py-16"><p className="text-muted-foreground">No slots available for this day.</p></div>}
+                    {slotsForSelectedDay.length === 0 && <div className="text-center py-16"><p className="text-muted-foreground">No hay huecos disponibles para este día.</p></div>}
                 </div>
             </CardContent>
         </Card>

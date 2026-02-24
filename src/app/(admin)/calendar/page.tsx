@@ -19,12 +19,12 @@ export default function AdminCalendarPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-headline text-3xl font-bold">Calendar</h1>
-          <p className="text-muted-foreground">Manage available slots for client bookings.</p>
+          <h1 className="font-headline text-3xl font-bold">Calendario</h1>
+          <p className="text-muted-foreground">Gestiona los huecos disponibles para las reservas de clientes.</p>
         </div>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Slot
+          Añadir Hueco
         </Button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -43,7 +43,7 @@ export default function AdminCalendarPage() {
         <Card className="lg:col-span-2">
             <CardHeader>
                 <CardTitle className="font-headline">
-                    Schedule for {date ? date.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'selected date'}
+                    Agenda para {date ? date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'fecha seleccionada'}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -63,13 +63,13 @@ export default function AdminCalendarPage() {
                                 {slot.isBooked ? (
                                     <Badge>{client?.name}</Badge>
                                 ) : (
-                                    <Badge variant="outline">Available</Badge>
+                                    <Badge variant="outline">Disponible</Badge>
                                 )}
                             </div>
                         )
                     }) : (
                         <div className="text-center py-16">
-                            <p className="text-muted-foreground">No slots scheduled for this day.</p>
+                            <p className="text-muted-foreground">No hay huecos programados para este día.</p>
                         </div>
                     )}
                 </div>

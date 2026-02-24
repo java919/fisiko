@@ -11,12 +11,12 @@ export default function ContentPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                <h1 className="font-headline text-3xl font-bold">Content Management</h1>
-                <p className="text-muted-foreground">Manage exclusive content for each service.</p>
+                <h1 className="font-headline text-3xl font-bold">Gestión de Contenido</h1>
+                <p className="text-muted-foreground">Gestiona el contenido exclusivo para cada servicio.</p>
                 </div>
                 <Button>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Add Content
+                Añadir Contenido
                 </Button>
             </div>
             <Tabs defaultValue={services[0].id} className="w-full">
@@ -29,8 +29,8 @@ export default function ContentPage() {
                     <TabsContent key={service.id} value={service.id}>
                         <Card>
                             <CardHeader>
-                                <CardTitle>{service.name} Content</CardTitle>
-                                <CardDescription>Content visible to clients with this service.</CardDescription>
+                                <CardTitle>Contenido de {service.name}</CardTitle>
+                                <CardDescription>Contenido visible para clientes con este servicio.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {serviceContent.filter(c => c.serviceId === service.id).map(content => (
@@ -47,15 +47,15 @@ export default function ContentPage() {
                                          <DropdownMenu>
                                             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                                                <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                                <DropdownMenuItem>Editar</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
                                             </DropdownMenuContent>
                                          </DropdownMenu>
                                     </div>
                                 ))}
                                 {serviceContent.filter(c => c.serviceId === service.id).length === 0 && (
                                     <div className="text-center py-16">
-                                        <p className="text-muted-foreground">No content for this service yet.</p>
+                                        <p className="text-muted-foreground">No hay contenido para este servicio todavía.</p>
                                     </div>
                                 )}
                             </CardContent>

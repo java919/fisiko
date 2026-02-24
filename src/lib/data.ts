@@ -32,17 +32,17 @@ export const sessions: Session[] = [
 ];
 
 export const serviceContent: ServiceContent[] = [
-    { id: 'c1', serviceId: 'pilates', title: 'Core Strengthening Basics', type: 'video', content: 'An introduction to core exercises on the reformer.', imageUrl: 'https://picsum.photos/seed/pilates1/600/400', imageHint: 'pilates reformer' },
-    { id: 'c2', serviceId: 'pilates', title: 'Breathing Techniques', type: 'text', content: 'Proper breathing is key in Pilates. Inhale through the nose to prepare for a movement. Exhale through the mouth as you execute the movement. This helps engage the deep abdominal muscles.' },
-    { id: 'c3', serviceId: 'training', title: 'Weekly Workout Split', type: 'image', content: 'A sample weekly workout split for balanced development.', imageUrl: 'https://picsum.photos/seed/workout/600/400', imageHint: 'gym workout' },
+    { id: 'c1', serviceId: 'pilates', title: 'Fundamentos de Fortalecimiento del Core', type: 'video', content: 'Una introducción a los ejercicios de core en el reformer.', imageUrl: 'https://picsum.photos/seed/pilates1/600/400', imageHint: 'pilates reformer' },
+    { id: 'c2', serviceId: 'pilates', title: 'Técnicas de Respiración', type: 'text', content: 'La respiración adecuada es clave en Pilates. Inhala por la nariz para prepararte para un movimiento. Exhala por la boca mientras ejecutas el movimiento. Esto ayuda a activar los músculos abdominales profundos.' },
+    { id: 'c3', serviceId: 'training', title: 'División de Entrenamiento Semanal', type: 'image', content: 'Un ejemplo de división de entrenamiento semanal para un desarrollo equilibrado.', imageUrl: 'https://picsum.photos/seed/workout/600/400', imageHint: 'gym workout' },
 ];
 
 export const emailTemplates: EmailTemplate[] = [
-    { id: 'e1', serviceId: 'pilates', bonoStep: 4, subject: 'Solo te quedan 4 sesiones de Pilates!', body: 'Hola {clientName}, ¡buen trabajo! Te quedan 4 sesiones de tu bono de Pilates. ¿Qué tal si pruebas una sesión de Fisioterapia con un 10% de descuento? ¡Tu cuerpo te lo agradecerá!' },
-    { id: 'e2', serviceId: 'pilates', bonoStep: 3, subject: 'Vas por la mitad de tu bono de Pilates', body: '...' },
-    { id: 'e3', serviceId: 'pilates', bonoStep: 2, subject: 'Recta final: 2 sesiones de Pilates restantes', body: '...' },
+    { id: 'e1', serviceId: 'pilates', bonoStep: 4, subject: '¡Solo te quedan 4 sesiones de Pilates!', body: 'Hola {clientName}, ¡buen trabajo! Te quedan 4 sesiones de tu bono de Pilates. ¿Qué tal si pruebas una sesión de Fisioterapia con un 10% de descuento? ¡Tu cuerpo te lo agradecerá!' },
+    { id: 'e2', serviceId: 'pilates', bonoStep: 3, subject: 'Vas por la mitad de tu bono de Pilates', body: 'Hola {clientName}, ¡sigue así! Ya estás a mitad de camino de tu bono de Pilates. ¡Tu constancia está dando frutos!' },
+    { id: 'e3', serviceId: 'pilates', bonoStep: 2, subject: 'Recta final: 2 sesiones de Pilates restantes', body: 'Hola {clientName}, ¡ya casi lo tienes! Solo te quedan 2 sesiones para completar tu bono. ¡No bajes el ritmo ahora!' },
     { id: 'e4', serviceId: 'pilates', bonoStep: 1, subject: 'Tu última sesión de Pilates se acerca', body: 'Hola {clientName}, ¡casi lo tienes! Solo te queda 1 sesión. ¡No olvides renovar tu bono para no perder el ritmo! Te ofrecemos un 15% de descuento en tu próxima renovación si lo haces ahora.' },
-    { id: 'e5', serviceId: 'pilates', bonoStep: 0, subject: 'Has completado tu bono de Pilates!', body: '...' },
+    { id: 'e5', serviceId: 'pilates', bonoStep: 0, subject: '¡Has completado tu bono de Pilates!', body: '¡Enhorabuena {clientName}! Has completado todas las sesiones de tu bono de Pilates. ¡Esperamos que te sientas genial! Renueva tu bono ahora y mantén tu progreso.' },
 ];
 
 const today = new Date();

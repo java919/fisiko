@@ -17,14 +17,14 @@ export default function ClientDetailPage({ params }: Props) {
   const clientSessions = sessions.filter(s => s.clientId === params.id).sort((a,b) => b.completedAt.getTime() - a.completedAt.getTime());
 
   if (!client) {
-    return <div>Client not found</div>;
+    return <div>Cliente no encontrado</div>;
   }
 
   return (
     <div className="space-y-6">
       <Link href="/admin/clients" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" />
-        Back to Clients
+        Volver a Clientes
       </Link>
       
       <div className="flex flex-col md:flex-row items-start gap-6">
@@ -41,15 +41,15 @@ export default function ClientDetailPage({ params }: Props) {
         <div className="md:ml-auto">
             <Button variant="outline">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Add Service
+                Añadir Servicio
             </Button>
         </div>
       </div>
       
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Active Services</CardTitle>
-          <CardDescription>Manage sessions for {client.name}'s services.</CardDescription>
+          <CardTitle className="font-headline">Servicios Activos</CardTitle>
+          <CardDescription>Gestiona las sesiones de los servicios de {client.name}.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             {subscriptions.map(sub => {
@@ -64,35 +64,35 @@ export default function ClientDetailPage({ params }: Props) {
                         <div className="flex items-center gap-4 shrink-0">
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{sub.remainingSessions}</p>
-                                <p className="text-xs text-muted-foreground">sessions left</p>
+                                <p className="text-xs text-muted-foreground">sesiones restantes</p>
                             </div>
                             <Separator orientation="vertical" className="h-10" />
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{sub.totalSessions}</p>
-                                <p className="text-xs text-muted-foreground">total sessions</p>
+                                <p className="text-xs text-muted-foreground">sesiones totales</p>
                             </div>
                             <Button disabled={sub.remainingSessions === 0}>
                                 <CheckCircle className="mr-2 h-4 w-4" />
-                                Mark as Completed
+                                Marcar como Completada
                             </Button>
                         </div>
                     </div>
                 )
             })}
-             {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-8">No active services.</p>}
+             {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-8">No hay servicios activos.</p>}
         </CardContent>
       </Card>
       
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Session History</CardTitle>
+          <CardTitle className="font-headline">Historial de Sesiones</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Service</TableHead>
-                    <TableHead>Date Completed</TableHead>
+                    <TableHead>Servicio</TableHead>
+                    <TableHead>Fecha de Finalización</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -101,12 +101,12 @@ export default function ClientDetailPage({ params }: Props) {
                     return (
                         <TableRow key={session.id}>
                             <TableCell>{service?.name}</TableCell>
-                            <TableCell>{session.completedAt.toLocaleDateString()}</TableCell>
+                            <TableCell>{session.completedAt.toLocaleDateString('es-ES')}</TableCell>
                         </TableRow>
                     )
                 }) : (
                     <TableRow>
-                        <TableCell colSpan={2} className="text-center h-24">No sessions completed yet.</TableCell>
+                        <TableCell colSpan={2} className="text-center h-24">No hay sesiones completadas todavía.</TableCell>
                     </TableRow>
                 )}
             </TableBody>

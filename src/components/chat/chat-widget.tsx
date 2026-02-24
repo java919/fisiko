@@ -20,7 +20,7 @@ export function ChatWidget() {
                         {notificationCount}
                     </span>
                 )}
-                <span className="sr-only">Open Chat</span>
+                <span className="sr-only">Abrir Chat</span>
             </Button>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetContent className="flex flex-col">

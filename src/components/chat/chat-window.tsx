@@ -38,7 +38,7 @@ export function ChatWindow() {
         <div className="flex h-full flex-col">
             {isAdmin && (
                 <div className="border-b pb-2 mb-2">
-                    <h3 className="font-semibold mb-2 px-1">Contacts</h3>
+                    <h3 className="font-semibold mb-2 px-1">Contactos</h3>
                     <ScrollArea className="h-[150px]">
                         <div className="flex flex-col gap-1 pr-4">
                         {allClients.map(client => (
@@ -93,10 +93,10 @@ export function ChatWindow() {
                 </div>
             </ScrollArea>
             <div className="mt-auto flex gap-2 pt-4 border-t">
-                <Input placeholder="Type a message..." className="flex-1" />
+                <Input placeholder="Escribe un mensaje..." className="flex-1" />
                 <Button>
                     <Send className="h-4 w-4" />
-                    <span className="sr-only">Send</span>
+                    <span className="sr-only">Enviar</span>
                 </Button>
             </div>
         </div>

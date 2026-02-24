@@ -11,15 +11,15 @@ export default function LoginPage() {
           <div className="mb-4 flex justify-center">
             <Logo />
           </div>
-          <CardTitle className="font-headline text-2xl">Welcome to WellnessFlow</CardTitle>
-          <CardDescription>Sign in to access your dashboard</CardDescription>
+          <CardTitle className="font-headline text-2xl">Bienvenido a WellnessFlow</CardTitle>
+          <CardDescription>Inicia sesión para acceder a tu panel</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Button asChild className="w-full">
-            <Link href="/dashboard">Login as Client</Link>
+            <Link href="/dashboard">Entrar como Cliente</Link>
           </Button>
           <Button asChild variant="secondary" className="w-full">
-            <Link href="/admin">Login as Admin</Link>
+            <Link href="/admin">Entrar como Administrador</Link>
           </Button>
         </CardContent>
       </Card>

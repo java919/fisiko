@@ -13,12 +13,12 @@ export default function ClientsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-headline text-3xl font-bold">Clients</h1>
-          <p className="text-muted-foreground">Manage your clients and their services.</p>
+          <h1 className="font-headline text-3xl font-bold">Clientes</h1>
+          <p className="text-muted-foreground">Gestiona tus clientes y sus servicios.</p>
         </div>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Client
+          Añadir Cliente
         </Button>
       </div>
       <Card>
@@ -26,9 +26,9 @@ export default function ClientsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead className="hidden md:table-cell">Active Services</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Nombre</TableHead>
+                <TableHead className="hidden md:table-cell">Servicios Activos</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,23 +58,23 @@ export default function ClientsPage() {
                             </Badge>
                           );
                         })}
-                         {clientSubscriptions.length === 0 && <span className="text-xs text-muted-foreground">No services</span>}
+                         {clientSubscriptions.length === 0 && <span className="text-xs text-muted-foreground">Sin servicios</span>}
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
                        <DropdownMenu>
                          <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon">
-                                <span className="sr-only">Actions</span>
+                                <span className="sr-only">Acciones</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
                          </DropdownMenuTrigger>
                          <DropdownMenuContent align="end">
                             <DropdownMenuItem asChild>
-                                <Link href={`/admin/clients/${client.id}`}>View Details</Link>
+                                <Link href={`/admin/clients/${client.id}`}>Ver Detalles</Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>Edit Client</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">Delete Client</DropdownMenuItem>
+                            <DropdownMenuItem>Editar Cliente</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Eliminar Cliente</DropdownMenuItem>
                          </DropdownMenuContent>
                        </DropdownMenu>
                     </TableCell>

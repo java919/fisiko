@@ -25,10 +25,10 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/clients", label: "Clients", icon: Users },
-    { href: "/admin/calendar", label: "Calendar", icon: Calendar },
-    { href: "/admin/content", label: "Content", icon: FileText },
+    { href: "/admin", label: "Panel", icon: LayoutDashboard },
+    { href: "/admin/clients", label: "Clientes", icon: Users },
+    { href: "/admin/calendar", label: "Calendario", icon: Calendar },
+    { href: "/admin/content", label: "Contenido", icon: FileText },
     { href: "/admin/settings/emails", label: "Emails", icon: Mail },
   ];
 
@@ -63,10 +63,10 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Logout">
+            <SidebarMenuButton asChild tooltip="Cerrar Sesión">
               <Link href="/login">
                 <LogOut />
-                <span>Logout</span>
+                <span>Cerrar Sesión</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

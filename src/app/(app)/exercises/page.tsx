@@ -13,8 +13,8 @@ export default function ExercisesPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="font-headline text-3xl font-bold">My Exercises</h1>
-                <p className="text-muted-foreground">Exclusive content for your subscribed services.</p>
+                <h1 className="font-headline text-3xl font-bold">Mis Ejercicios</h1>
+                <p className="text-muted-foreground">Contenido exclusivo para tus servicios suscritos.</p>
             </div>
             {availableServices.length > 0 ? (
                 <Tabs defaultValue={availableServices[0]?.id} className="w-full">
@@ -44,7 +44,7 @@ export default function ExercisesPage() {
                                 ))}
                                 {serviceContent.filter(c => c.serviceId === service.id).length === 0 && (
                                     <div className="md:col-span-3 text-center py-16">
-                                        <p className="text-muted-foreground">No content for this service yet. Check back soon!</p>
+                                        <p className="text-muted-foreground">Aún no hay contenido para este servicio. ¡Vuelve pronto!</p>
                                     </div>
                                 )}
                             </div>
@@ -54,8 +54,8 @@ export default function ExercisesPage() {
             ) : (
                 <Card className="text-center py-16">
                     <CardContent>
-                        <h3 className="font-semibold mb-2">No Content Available</h3>
-                        <p className="text-muted-foreground">Subscribe to a service to view exclusive content.</p>
+                        <h3 className="font-semibold mb-2">No Hay Contenido Disponible</h3>
+                        <p className="text-muted-foreground">Suscríbete a un servicio para ver contenido exclusivo.</p>
                     </CardContent>
                 </Card>
             )}

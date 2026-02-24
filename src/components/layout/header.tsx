@@ -44,11 +44,11 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>Perfil</DropdownMenuItem>
+            <DropdownMenuItem>Ajustes</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/login">Logout</Link>
+              <Link href="/login">Cerrar sesión</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

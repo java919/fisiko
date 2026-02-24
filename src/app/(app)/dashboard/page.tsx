@@ -15,14 +15,14 @@ export default function ClientDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-headline text-3xl font-bold">Welcome, {currentUser.name.split(' ')[0]}!</h1>
+      <h1 className="font-headline text-3xl font-bold">¡Bienvenido, {currentUser.name.split(' ')[0]}!</h1>
       
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Your Services</CardTitle>
-              <CardDescription>Here's a summary of your active service packages.</CardDescription>
+              <CardTitle className="font-headline">Tus Servicios</CardTitle>
+              <CardDescription>Aquí tienes un resumen de tus paquetes de servicios activos.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {userServices.map(sub => {
@@ -33,27 +33,27 @@ export default function ClientDashboard() {
                   <div key={sub.serviceId}>
                     <div className="flex justify-between items-center mb-2">
                         <h3 className="font-semibold">{service.name}</h3>
-                        <span className="text-sm font-medium">{sub.remainingSessions} / {sub.totalSessions} sessions left</span>
+                        <span className="text-sm font-medium">{sub.remainingSessions} / {sub.totalSessions} sesiones restantes</span>
                     </div>
                     <Progress value={progress} />
                   </div>
                 )
               })}
-              {userServices.length === 0 && <p className="text-muted-foreground">You don't have any active services.</p>}
+              {userServices.length === 0 && <p className="text-muted-foreground">No tienes ningún servicio activo.</p>}
             </CardContent>
           </Card>
         </div>
         <div className="space-y-6">
           <Card className="bg-primary text-primary-foreground">
             <CardHeader>
-              <CardTitle className="font-headline">Book Your Next Session</CardTitle>
+              <CardTitle className="font-headline">Reserva tu Próxima Sesión</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-4">Ready to continue your wellness journey? Book your next appointment now.</p>
+              <p className="mb-4">¿Preparado para continuar tu viaje de bienestar? Reserva tu próxima cita ahora.</p>
               <Button variant="secondary" asChild className="w-full">
                 <Link href="/booking">
                   <CalendarPlus className="mr-2 h-4 w-4" />
-                  Find a Slot
+                  Encontrar un hueco
                 </Link>
               </Button>
             </CardContent>
@@ -64,14 +64,14 @@ export default function ClientDashboard() {
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                 <Bell className="w-6 h-6 text-primary"/>
                 <div>
-                    <CardTitle className="font-headline">Upcoming Appointment</CardTitle>
+                    <CardTitle className="font-headline">Próxima Cita</CardTitle>
                     <CardDescription>
                         {services.find(s => s.id === upcomingAppointment.serviceId)?.name}
                     </CardDescription>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="font-semibold">{upcomingAppointment.startTime.toLocaleString([], { dateStyle: 'long', timeStyle: 'short' })}</p>
+                <p className="font-semibold">{upcomingAppointment.startTime.toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' })}</p>
               </CardContent>
             </Card>
           )}
@@ -80,13 +80,13 @@ export default function ClientDashboard() {
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                   <Video className="w-6 h-6 text-primary" />
                   <div>
-                      <CardTitle className="font-headline">New Exercises</CardTitle>
-                      <CardDescription>Check out new content for your services.</CardDescription>
+                      <CardTitle className="font-headline">Nuevos Ejercicios</CardTitle>
+                      <CardDescription>Consulta el nuevo contenido de tus servicios.</CardDescription>
                   </div>
               </CardHeader>
               <CardContent>
                  <Button variant="outline" asChild className="w-full">
-                    <Link href="/exercises">View Content</Link>
+                    <Link href="/exercises">Ver Contenido</Link>
                 </Button>
               </CardContent>
           </Card>
