@@ -21,8 +21,8 @@ export default function ClientDashboard() {
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Mis Bonos</CardTitle>
-              <CardDescription>Resumen de tus sesiones disponibles en FISIKO.</CardDescription>
+              <CardTitle className="font-headline">Mis Bonos FISIKO</CardTitle>
+              <CardDescription>Resumen de tus sesiones disponibles en nuestro centro.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {userServices.map(sub => {
@@ -71,7 +71,7 @@ export default function ClientDashboard() {
                         {services.find(s => s.id === upcomingAppointment.serviceId)?.name}
                     </CardDescription>
                 </div>
-              </CardHeader>
+              </Header>
               <CardContent>
                 <p className="font-semibold text-lg">{upcomingAppointment.startTime.toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' })}</p>
               </CardContent>

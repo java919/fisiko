@@ -1,2 +1,3 @@
-// Este archivo ha sido neutralizado para evitar conflictos de rutas. La página real está en src/app/dashboard/page.tsx
-export default function ObsoletePage() { return null; }
+// Este archivo ha sido movido a /src/app/dashboard/page.tsx para evitar conflictos de rutas paralelas.
+import { redirect } from 'next/navigation';
+export default function ObsoletePage() { redirect('/dashboard'); }

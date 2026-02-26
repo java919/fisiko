@@ -1,2 +1,1 @@
-// Archivo neutralizado para evitar conflictos de rutas.
-export default function ObsoleteLayout({ children }: { children: any }) { return children; }
+// Archivo eliminado para resolver conflicto de rutas paralelas
