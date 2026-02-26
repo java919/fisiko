@@ -1,19 +1,19 @@
 import type { Service, Client, ClientService, Session, ServiceContent, EmailTemplate, CalendarSlot } from './types';
 
 export const services: Service[] = [
-  { id: 'physio', name: 'Fisioterapia', description: 'Sesiones de fisioterapia para recuperación y bienestar integral.' },
-  { id: 'pilates', name: 'Pilates Máquina', description: 'Fortalece tu core y mejora tu postura con reformers de última generación.' },
-  { id: 'training', name: 'Entrenamiento Personal', description: 'Planes a medida adaptados a tus objetivos específicos.' },
-  { id: 'hypo', name: 'Hipopresivos', description: 'Técnicas especializadas de respiración y control postural.' },
-  { id: 'functional', name: 'Entrenamiento Funcional', description: 'Mejora tu fuerza y movilidad para los retos del día a día.' },
-  { id: 'wellbeing', name: 'Bienestar Integral', description: 'Descubre nuestros servicios complementarios de salud.' },
+  { id: 'physio', name: 'Fisioterapia', description: 'Sesiones de fisioterapia para recuperación y bienestar integral.', price: 55 },
+  { id: 'pilates', name: 'Pilates Máquina', description: 'Fortalece tu core y mejora tu postura con reformers de última generación.', price: 25 },
+  { id: 'training', name: 'Entrenamiento Personal', description: 'Planes a medida adaptados a tus objetivos específicos.', price: 60 },
+  { id: 'hypo', name: 'Hipopresivos', description: 'Técnicas especializadas de respiración y control postural.', price: 30 },
+  { id: 'functional', name: 'Entrenamiento Funcional', description: 'Mejora tu fuerza y movilidad para los retos del día a día.', price: 35 },
+  { id: 'wellbeing', name: 'Bienestar Integral', description: 'Descubre nuestros servicios complementarios de salud.', price: 50 },
 ];
 
 export const clients: Client[] = [
-  { id: '1', name: 'Juan Pérez', email: 'juan.perez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
-  { id: '2', name: 'Ana García', email: 'ana.garcia@example.com', avatarUrl: 'https://images.unsplash.com/photo-1581403341630-a6e0b9d2d257?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
-  { id: '3', name: 'Luis Rodríguez', email: 'luis.rodriguez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
-  { id: '4', name: 'María Martínez', email: 'maria.martinez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
+  { id: '1', name: 'Juan Pérez', email: 'juan.perez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150', birthday: '1990-05-15' },
+  { id: '2', name: 'Ana García', email: 'ana.garcia@example.com', avatarUrl: 'https://images.unsplash.com/photo-1581403341630-a6e0b9d2d257?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150', birthday: '1985-08-20' },
+  { id: '3', name: 'Luis Rodríguez', email: 'luis.rodriguez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150', birthday: '1992-12-10' },
+  { id: '4', name: 'María Martínez', email: 'maria.martinez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150', birthday: '1988-03-05' },
 ];
 
 export const clientServices: ClientService[] = [
@@ -25,10 +25,11 @@ export const clientServices: ClientService[] = [
 ];
 
 export const sessions: Session[] = [
-    { id: 's1', clientId: '1', serviceId: 'pilates', completedAt: new Date('2024-05-10T10:00:00Z') },
-    { id: 's2', clientId: '1', serviceId: 'pilates', completedAt: new Date('2024-05-17T10:00:00Z') },
-    { id: 's3', clientId: '2', serviceId: 'training', completedAt: new Date('2024-05-12T18:00:00Z') },
-    { id: 's4', clientId: '2', serviceId: 'training', completedAt: new Date('2024-05-19T18:00:00Z') },
+    { id: 's1', clientId: '1', serviceId: 'pilates', completedAt: new Date(new Date().setDate(new Date().getDate() - 1)), revenue: 25 },
+    { id: 's2', clientId: '1', serviceId: 'pilates', completedAt: new Date(new Date().setDate(new Date().getDate() - 2)), revenue: 25 },
+    { id: 's3', clientId: '2', serviceId: 'training', completedAt: new Date(new Date().setDate(new Date().getDate() - 3)), revenue: 60 },
+    { id: 's4', clientId: '2', serviceId: 'training', completedAt: new Date(new Date().setMonth(new Date().getMonth() - 1)), revenue: 60 },
+    { id: 's5', clientId: '3', serviceId: 'hypo', completedAt: new Date(), revenue: 30 },
 ];
 
 export const serviceContent: ServiceContent[] = [
@@ -38,8 +39,9 @@ export const serviceContent: ServiceContent[] = [
 ];
 
 export const emailTemplates: EmailTemplate[] = [
-    { id: 'e1', serviceId: 'pilates', bonoStep: 2, subject: '¡Te quedan 2 sesiones de tu bono de Pilates!', body: 'Hola {clientName}, queríamos avisarte de que estás aprovechando genial tu bono. ¡Nos vemos pronto!' },
-    { id: 'e2', serviceId: 'pilates', bonoStep: 0, subject: 'Has completado tu bono de Pilates', body: 'Hola {clientName}, ¡enhorabuena por tu constancia! Ya puedes renovar tu bono en el centro.' },
+    { id: 'e1', serviceId: 'pilates', type: 'bono', bonoStep: 2, subject: '¡Te quedan 2 sesiones de tu bono de Pilates!', body: 'Hola {clientName}, queríamos avisarte de que estás aprovechando genial tu bono. ¡Nos vemos pronto!' },
+    { id: 'e2', serviceId: 'pilates', type: 'bono', bonoStep: 0, subject: 'Has completado tu bono de Pilates', body: 'Hola {clientName}, ¡enhorabuena por tu constancia! Ya puedes renovar tu bono en el centro.' },
+    { id: 'e3', type: 'birthday', subject: '¡Feliz Cumpleaños de parte de FISIKO! 🎂', body: 'Hola {clientName}, ¡muchas felicidades en tu día! Queremos agradecerte tu confianza y desearte un año lleno de salud y bienestar.' },
 ];
 
 const today = new Date();

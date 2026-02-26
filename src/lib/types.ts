@@ -2,6 +2,7 @@ export type Service = {
   id: string;
   name: string;
   description: string;
+  price: number; // Precio por sesión individual
 };
 
 export type Client = {
@@ -9,6 +10,7 @@ export type Client = {
   name: string;
   email: string;
   avatarUrl: string;
+  birthday?: string; // Formato YYYY-MM-DD
 };
 
 export type ClientService = {
@@ -23,6 +25,7 @@ export type Session = {
   clientId: string;
   serviceId: string;
   completedAt: Date;
+  revenue: number; // Ingreso generado por esta sesión
 };
 
 export type CalendarSlot = {
@@ -39,15 +42,15 @@ export type ServiceContent = {
     serviceId: string;
     title: string;
     type: 'text' | 'image' | 'video';
-    content: string; // URL for image/video, text for text
+    content: string;
     imageUrl?: string;
     imageHint?: string;
 };
 
 export type ChatMessage = {
     id: string;
-    senderId: string; // 'admin' or clientId
-    receiverId: string; // 'admin' or clientId
+    senderId: string;
+    receiverId: string;
     content: string;
     timestamp: Date;
     isRead: boolean;
@@ -55,8 +58,9 @@ export type ChatMessage = {
 
 export type EmailTemplate = {
   id: string;
-  serviceId: string;
-  bonoStep: number; // e.g., for email after 1st, 2nd session..
+  serviceId?: string; // Opcional para correos generales como cumpleaños
+  type: 'bono' | 'birthday';
+  bonoStep?: number;
   subject: string;
   body: string;
 }

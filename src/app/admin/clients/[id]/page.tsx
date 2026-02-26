@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { clients, clientServices, services as allServices, sessions } from "@/lib/data";
-import { ArrowLeft, CheckCircle, PlusCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, PlusCircle, Cake } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
@@ -35,8 +37,18 @@ export default async function ClientDetailPage({ params }: Props) {
             <AvatarFallback className="text-2xl">{client.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
             </Avatar>
             <div>
-            <h1 className="font-headline text-3xl font-bold">{client.name}</h1>
-            <p className="text-muted-foreground">{client.email}</p>
+                <h1 className="font-headline text-3xl font-bold">{client.name}</h1>
+                <p className="text-muted-foreground">{client.email}</p>
+                <div className="flex items-center gap-2 mt-2 text-sm">
+                    <Cake className="h-4 w-4 text-primary" />
+                    <span className="font-medium">Cumpleaños:</span>
+                    <Input 
+                        type="date" 
+                        defaultValue={client.birthday} 
+                        className="h-8 w-40 text-xs" 
+                    />
+                    <Button size="sm" variant="ghost" className="h-8 text-xs">Guardar</Button>
+                </div>
             </div>
         </div>
         <div className="md:ml-auto">
@@ -58,8 +70,11 @@ export default async function ClientDetailPage({ params }: Props) {
                 if (!service) return null;
                 return (
                     <div key={service.id} className="p-4 border rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                        <div>
-                            <h3 className="font-semibold">{service.name}</h3>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                                <h3 className="font-semibold">{service.name}</h3>
+                                <span className="text-xs bg-muted px-2 py-0.5 rounded-full font-bold">{service.price}€ / sesión</span>
+                            </div>
                             <p className="text-sm text-muted-foreground">{service.description}</p>
                         </div>
                         <div className="flex items-center gap-4 shrink-0">
@@ -86,7 +101,7 @@ export default async function ClientDetailPage({ params }: Props) {
       
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Historial de Sesiones</CardTitle>
+          <CardTitle className="font-headline">Historial de Sesiones e Ingresos</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -94,6 +109,7 @@ export default async function ClientDetailPage({ params }: Props) {
                 <TableRow>
                     <TableHead>Servicio</TableHead>
                     <TableHead>Fecha</TableHead>
+                    <TableHead className="text-right">Ingreso</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -103,11 +119,12 @@ export default async function ClientDetailPage({ params }: Props) {
                         <TableRow key={session.id}>
                             <TableCell className="font-medium">{service?.name}</TableCell>
                             <TableCell>{session.completedAt.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</TableCell>
+                            <TableCell className="text-right font-bold text-primary">{session.revenue}€</TableCell>
                         </TableRow>
                     )
                 }) : (
                     <TableRow>
-                        <TableCell colSpan={2} className="text-center h-24 text-muted-foreground">Sin sesiones registradas.</TableCell>
+                        <TableCell colSpan={3} className="text-center h-24 text-muted-foreground">Sin sesiones registradas.</TableCell>
                     </TableRow>
                 )}
             </TableBody>
