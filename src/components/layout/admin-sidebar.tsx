@@ -29,7 +29,7 @@ export function AdminSidebar() {
     { href: "/admin/clients", label: "Gestión de Clientes", icon: Users },
     { href: "/admin/calendar", label: "Calendario", icon: Calendar },
     { href: "/admin/content", label: "Contenido Exclusivo", icon: FileText },
-    { href: "/admin/settings/emails", label: "Configuración de Emails", icon: Mail },
+    { href: "/admin/settings/emails", label: "Plantillas de Email", icon: Mail },
   ];
 
   return (
@@ -48,7 +48,7 @@ export function AdminSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href))}
+                isActive={pathname === item.href}
                 tooltip={item.label}
               >
                 <Link href={item.href}>

@@ -11,8 +11,8 @@ export default function LoginPage() {
           <div className="mb-4 flex justify-center">
             <Logo />
           </div>
-          <CardTitle className="font-headline text-2xl">Bienvenido a FISIKO</CardTitle>
-          <CardDescription>Inicia sesión para gestionar tu bienestar</CardDescription>
+          <CardTitle className="font-headline text-2xl uppercase tracking-wider text-primary">FISIKO</CardTitle>
+          <CardDescription>Bienvenido. Inicia sesión para continuar.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Button asChild className="w-full">
