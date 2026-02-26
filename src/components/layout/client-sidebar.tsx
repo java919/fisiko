@@ -24,10 +24,10 @@ export function ClientSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/dashboard", label: "Mi Panel", icon: LayoutDashboard },
-    { href: "/dashboard/booking", label: "Reservar Sesión", icon: CalendarPlus },
-    { href: "/dashboard/exercises", label: "Mis Ejercicios", icon: Dumbbell },
-    { href: "/dashboard/history", label: "Historial", icon: History },
+    { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
+    { href: "/dashboard/booking", label: "Nueva Reserva", icon: CalendarPlus },
+    { href: "/dashboard/exercises", label: "Mis Entrenamientos", icon: Dumbbell },
+    { href: "/dashboard/history", label: "Mis Sesiones", icon: History },
   ];
 
   return (
@@ -46,7 +46,7 @@ export function ClientSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                 tooltip={item.label}
               >
                 <Link href={item.href}>

@@ -28,7 +28,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeServices}</div>
-            <p className="text-xs text-muted-foreground">Todos los servicios están activos</p>
+            <p className="text-xs text-muted-foreground">Todos los servicios están operativos</p>
           </CardContent>
         </Card>
         <Card>

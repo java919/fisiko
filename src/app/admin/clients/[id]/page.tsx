@@ -80,6 +80,7 @@ export default async function ClientDetailPage({ params }: Props) {
                     </div>
                 )
             })}
+             {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-8">Sin servicios activos.</p>}
         </CardContent>
       </Card>
       

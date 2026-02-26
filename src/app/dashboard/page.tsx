@@ -20,8 +20,8 @@ export default function ClientDashboard() {
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Tus Bonos</CardTitle>
-              <CardDescription>Resumen de tus sesiones disponibles.</CardDescription>
+              <CardTitle className="font-headline">Mis Bonos</CardTitle>
+              <CardDescription>Resumen de tus sesiones disponibles en FISIKO.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {userServices.map(sub => {
@@ -38,6 +38,9 @@ export default function ClientDashboard() {
                   </div>
                 )
               })}
+              {userServices.length === 0 && (
+                <p className="text-muted-foreground">No tienes bonos activos actualmente.</p>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -25,11 +25,11 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/admin", label: "Panel Principal", icon: LayoutDashboard },
-    { href: "/admin/clients", label: "Clientes", icon: Users },
+    { href: "/admin", label: "Panel de Control", icon: LayoutDashboard },
+    { href: "/admin/clients", label: "Gestión de Clientes", icon: Users },
     { href: "/admin/calendar", label: "Calendario", icon: Calendar },
-    { href: "/admin/content", label: "Contenido", icon: FileText },
-    { href: "/admin/settings/emails", label: "Plantillas Email", icon: Mail },
+    { href: "/admin/content", label: "Contenido Exclusivo", icon: FileText },
+    { href: "/admin/settings/emails", label: "Configuración de Emails", icon: Mail },
   ];
 
   return (
