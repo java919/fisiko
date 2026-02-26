@@ -1,23 +1,23 @@
 import type { Service, Client, ClientService, Session, ServiceContent, EmailTemplate, CalendarSlot } from './types';
 
 export const services: Service[] = [
-  { id: 'physio', name: 'Fisioterapia', description: 'Sesiones de fisioterapia para recuperación y bienestar.' },
-  { id: 'pilates', name: 'Pilates Máquina', description: 'Fortalece tu core y mejora tu postura.' },
-  { id: 'training', name: 'Entrenamientos Personales', description: 'Planes de entrenamiento personalizados.' },
-  { id: 'hypo', name: 'Hipopresivos', description: 'Técnicas de respiración y posturales.' },
-  { id: 'functional', name: 'Entrenamientos Funcionales', description: 'Mejora tu fuerza para el día a día.' },
-  { id: 'more', name: 'Y mucho más', description: 'Descubre otros servicios.' },
+  { id: 'physio', name: 'Fisioterapia', description: 'Sesiones de fisioterapia para recuperación y bienestar integral.' },
+  { id: 'pilates', name: 'Pilates Máquina', description: 'Fortalece tu core y mejora tu postura con reformers de última generación.' },
+  { id: 'training', name: 'Entrenamiento Personal', description: 'Planes a medida adaptados a tus objetivos específicos.' },
+  { id: 'hypo', name: 'Hipopresivos', description: 'Técnicas especializadas de respiración y control postural.' },
+  { id: 'functional', name: 'Entrenamiento Funcional', description: 'Mejora tu fuerza y movilidad para los retos del día a día.' },
+  { id: 'wellbeing', name: 'Bienestar Integral', description: 'Descubre nuestros servicios complementarios de salud.' },
 ];
 
 export const clients: Client[] = [
   { id: '1', name: 'Juan Pérez', email: 'juan.perez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
   { id: '2', name: 'Ana García', email: 'ana.garcia@example.com', avatarUrl: 'https://images.unsplash.com/photo-1581403341630-a6e0b9d2d257?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
   { id: '3', name: 'Luis Rodríguez', email: 'luis.rodriguez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
-  { id: '4', name: 'Maria Martinez', email: 'maria.martinez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
+  { id: '4', name: 'María Martínez', email: 'maria.martinez@example.com', avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=150' },
 ];
 
 export const clientServices: ClientService[] = [
-  { clientId: '1', serviceId: 'pilates', totalSessions: 5, remainingSessions: 3 },
+  { clientId: '1', serviceId: 'pilates', totalSessions: 10, remainingSessions: 6 },
   { clientId: '1', serviceId: 'physio', totalSessions: 1, remainingSessions: 1 },
   { clientId: '2', serviceId: 'training', totalSessions: 10, remainingSessions: 8 },
   { clientId: '3', serviceId: 'hypo', totalSessions: 8, remainingSessions: 0 },
@@ -32,14 +32,14 @@ export const sessions: Session[] = [
 ];
 
 export const serviceContent: ServiceContent[] = [
-    { id: 'c1', serviceId: 'pilates', title: 'Fundamentos de Fortalecimiento del Core', type: 'video', content: 'Una introducción a los ejercicios de core en el reformer.', imageUrl: 'https://images.unsplash.com/photo-1747240549807-fc3962949818?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'pilates reformer' },
-    { id: 'c2', serviceId: 'pilates', title: 'Técnicas de Respiración', type: 'text', content: 'La respiración adecuada es clave en Pilates. Inhala por la nariz para prepararte para un movimiento. Exhala por la boca mientras ejecutas el movimiento.' },
-    { id: 'c3', serviceId: 'training', title: 'División de Entrenamiento Semanal', type: 'image', content: 'Un ejemplo de división de entrenamiento semanal para un desarrollo equilibrado.', imageUrl: 'https://images.unsplash.com/photo-1692369608191-005af0051fe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'gym workout' },
+    { id: 'c1', serviceId: 'pilates', title: 'Fundamentos del Core en Reformer', type: 'video', content: 'Iniciación a los movimientos básicos en la máquina de Pilates.', imageUrl: 'https://images.unsplash.com/photo-1747240549807-fc3962949818?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'pilates reformer' },
+    { id: 'c2', serviceId: 'pilates', title: 'La Respiración en FISIKO', type: 'text', content: 'Aprende a coordinar tu respiración con cada esfuerzo para maximizar resultados.' },
+    { id: 'c3', serviceId: 'training', title: 'Rutina Semanal de Fuerza', type: 'image', content: 'Guía visual para tus entrenamientos de apoyo en casa.', imageUrl: 'https://images.unsplash.com/photo-1692369608191-005af0051fe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'gym workout' },
 ];
 
 export const emailTemplates: EmailTemplate[] = [
-    { id: 'e1', serviceId: 'pilates', bonoStep: 4, subject: '¡Solo te quedan 4 sesiones de Pilates!', body: 'Hola {clientName}, ¡buen trabajo! Te quedan 4 sesiones de tu bono de Pilates.' },
-    { id: 'e2', serviceId: 'pilates', bonoStep: 3, subject: 'Vas por la mitad de tu bono de Pilates', body: 'Hola {clientName}, ¡sigue así! Ya estás a mitad de camino.' },
+    { id: 'e1', serviceId: 'pilates', bonoStep: 2, subject: '¡Te quedan 2 sesiones de tu bono de Pilates!', body: 'Hola {clientName}, queríamos avisarte de que estás aprovechando genial tu bono. ¡Nos vemos pronto!' },
+    { id: 'e2', serviceId: 'pilates', bonoStep: 0, subject: 'Has completado tu bono de Pilates', body: 'Hola {clientName}, ¡enhorabuena por tu constancia! Ya puedes renovar tu bono en el centro.' },
 ];
 
 const today = new Date();

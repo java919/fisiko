@@ -26,45 +26,49 @@ export function ClientSidebar() {
   const menuItems = [
     { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
     { href: "/dashboard/booking", label: "Nueva Reserva", icon: CalendarPlus },
-    { href: "/dashboard/exercises", label: "Mis Ejercicios", icon: Dumbbell },
-    { href: "/dashboard/history", label: "Historial", icon: History },
+    { href: "/dashboard/exercises", label: "Contenido Exclusivo", icon: Dumbbell },
+    { href: "/dashboard/history", label: "Mi Historial", icon: History },
   ];
 
   return (
-    <Sidebar>
-      <SidebarHeader className="p-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <Logo className="h-8 w-8" />
-          <span className="font-headline text-xl font-bold text-sidebar-foreground">
-            FISIKO
-          </span>
+    <Sidebar className="border-r-0 shadow-xl">
+      <SidebarHeader className="p-6">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <Logo className="h-10 w-10" />
+          <div className="flex flex-col">
+            <span className="font-headline text-2xl font-black tracking-tighter text-sidebar-foreground">
+              FISIKO
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">Bienestar Integral</span>
+          </div>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarMenu className="px-2">
+      <SidebarContent className="px-3">
+        <SidebarMenu className="gap-2">
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
                 isActive={pathname === item.href}
                 tooltip={item.label}
+                className="h-12 text-base rounded-lg transition-all"
               >
                 <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
+                  <item.icon className="!w-5 !h-5" />
+                  <span className="font-medium">{item.label}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="p-4 border-t border-sidebar-border/50">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Cerrar Sesión">
+            <SidebarMenuButton asChild tooltip="Cerrar Sesión" className="h-12 text-sidebar-foreground/70 hover:text-destructive transition-colors">
               <Link href="/login">
-                <LogOut />
-                <span>Cerrar Sesión</span>
+                <LogOut className="!w-5 !h-5" />
+                <span className="font-medium">Cerrar Sesión</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

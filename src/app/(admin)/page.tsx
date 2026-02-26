@@ -1,1 +1,0 @@
-// Archivo desactivado para resolver conflicto de rutas paralelas con /src/app/admin/page.tsx
