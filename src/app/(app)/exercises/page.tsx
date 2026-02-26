@@ -1,1 +1,1 @@
-// Archivo desactivado para evitar conflictos con /src/app/dashboard/exercises/page.tsx
+// Archivo desactivado para evitar conflictos con la nueva estructura

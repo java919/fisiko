@@ -1,1 +1,1 @@
-// Archivo desactivado para evitar conflictos con /src/app/admin/clients/[id]/page.tsx
+// Archivo desactivado para evitar conflictos

@@ -1,1 +1,1 @@
-// Archivo desactivado para evitar conflictos de layouts paralelos
+// Archivo desactivado para resolver conflictos de layout paralelos

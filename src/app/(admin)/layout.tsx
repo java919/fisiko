@@ -1,1 +1,1 @@
-// Archivo eliminado para resolver conflicto de rutas paralelas
+// Archivo desactivado para evitar conflictos de layout
