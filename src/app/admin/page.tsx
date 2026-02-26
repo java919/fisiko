@@ -9,7 +9,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-headline text-3xl font-bold">Panel de Administración</h1>
+      <h1 className="font-headline text-3xl font-bold text-primary">Panel de Administración FISIKO</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -28,7 +28,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeServices}</div>
-            <p className="text-xs text-muted-foreground">Todos los servicios están operativos</p>
+            <p className="text-xs text-muted-foreground">Todos operativos</p>
           </CardContent>
         </Card>
         <Card>
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{sessionsThisMonth}</div>
-            <p className="text-xs text-muted-foreground">+10% desde el mes pasado</p>
+            <p className="text-xs text-muted-foreground">+10% vs mes anterior</p>
           </CardContent>
         </Card>
          <Card>
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">De Juan y Ana</p>
+            <p className="text-xs text-muted-foreground">Pendientes de respuesta</p>
           </CardContent>
         </Card>
       </div>
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
                         return (
                             <div key={session.id} className="flex items-center">
                                 <div className="ml-4 space-y-1">
-                                    <p className="text-sm font-medium leading-none">{client?.name} completó una sesión de {service?.name}.</p>
+                                    <p className="text-sm font-medium leading-none">{client?.name} completó {service?.name}.</p>
                                     <p className="text-sm text-muted-foreground">{session.completedAt.toLocaleDateString('es-ES')}</p>
                                 </div>
                             </div>

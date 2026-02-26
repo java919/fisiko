@@ -10,9 +10,9 @@ export function Logo({ className }: { className?: string }) {
       strokeLinejoin="round"
       className={`h-10 w-10 text-primary ${className}`}
     >
-      <path d="M18 10H8V3H18" />
-      <path d="M8 3v18" />
-      <path d="M8 10h7" />
+      <path d="M18 3H6v18" />
+      <path d="M6 11h9" />
+      <circle cx="15" cy="11" r="1" fill="currentColor" />
     </svg>
   );
 }
