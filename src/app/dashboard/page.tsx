@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Bell, CalendarPlus, Video } from "lucide-react";
 
 export default function ClientDashboard() {
+  // Simulamos que el usuario logueado es Juan Pérez (ID 1)
   const currentUser = clients.find(c => c.id === '1');
   const userServices = clientServices.filter(cs => cs.clientId === currentUser?.id);
   const upcomingAppointment = calendarSlots.find(slot => slot.bookedBy === currentUser?.id && slot.startTime > new Date());
