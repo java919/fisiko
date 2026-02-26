@@ -1,1 +1,1 @@
-// Archivo desactivado para evitar conflictos de rutas paralelas con /src/app/dashboard/history/page.tsx
+// Archivo desactivado para evitar conflictos con /src/app/dashboard/history/page.tsx

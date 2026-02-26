@@ -1,1 +1,1 @@
-// Archivo eliminado para resolver conflicto de rutas paralelas con /admin
+// Archivo desactivado para evitar conflictos con /src/app/admin/page.tsx
