@@ -12,7 +12,7 @@ export default function LoginPage() {
             <Logo />
           </div>
           <CardTitle className="font-headline text-2xl">Bienvenido a FISIKO</CardTitle>
-          <CardDescription>Inicia sesión para acceder a tu panel</CardDescription>
+          <CardDescription>Inicia sesión para gestionar tu bienestar</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Button asChild className="w-full">

@@ -8,16 +8,17 @@ import { ArrowLeft, CheckCircle, PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function ClientDetailPage({ params }: Props) {
-  const client = clients.find(c => c.id === params.id);
-  const subscriptions = clientServices.filter(cs => cs.clientId === params.id);
-  const clientSessions = sessions.filter(s => s.clientId === params.id).sort((a,b) => b.completedAt.getTime() - a.completedAt.getTime());
+export default async function ClientDetailPage({ params }: Props) {
+  const { id } = await params;
+  const client = clients.find(c => c.id === id);
+  const subscriptions = clientServices.filter(cs => cs.clientId === id);
+  const clientSessions = sessions.filter(s => s.clientId === id).sort((a,b) => b.completedAt.getTime() - a.completedAt.getTime());
 
   if (!client) {
-    return <div>Cliente no encontrado</div>;
+    return <div className="p-8 text-center">Cliente no encontrado</div>;
   }
 
   return (
@@ -49,7 +50,7 @@ export default function ClientDetailPage({ params }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Servicios Activos</CardTitle>
-          <CardDescription>Gestiona las sesiones de los servicios de {client.name}.</CardDescription>
+          <CardDescription>Gestión de bonos y sesiones restantes.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             {subscriptions.map(sub => {
@@ -64,22 +65,21 @@ export default function ClientDetailPage({ params }: Props) {
                         <div className="flex items-center gap-4 shrink-0">
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{sub.remainingSessions}</p>
-                                <p className="text-xs text-muted-foreground">sesiones restantes</p>
+                                <p className="text-xs text-muted-foreground">restantes</p>
                             </div>
                             <Separator orientation="vertical" className="h-10" />
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{sub.totalSessions}</p>
-                                <p className="text-xs text-muted-foreground">sesiones totales</p>
+                                <p className="text-xs text-muted-foreground">totales</p>
                             </div>
                             <Button disabled={sub.remainingSessions === 0}>
                                 <CheckCircle className="mr-2 h-4 w-4" />
-                                Marcar como Completada
+                                Completar Sesión
                             </Button>
                         </div>
                     </div>
                 )
             })}
-             {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-8">No hay servicios activos.</p>}
         </CardContent>
       </Card>
       
@@ -92,7 +92,7 @@ export default function ClientDetailPage({ params }: Props) {
             <TableHeader>
                 <TableRow>
                     <TableHead>Servicio</TableHead>
-                    <TableHead>Fecha de Finalización</TableHead>
+                    <TableHead>Fecha</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -100,13 +100,13 @@ export default function ClientDetailPage({ params }: Props) {
                     const service = allServices.find(s => s.id === session.serviceId);
                     return (
                         <TableRow key={session.id}>
-                            <TableCell>{service?.name}</TableCell>
-                            <TableCell>{session.completedAt.toLocaleDateString('es-ES')}</TableCell>
+                            <TableCell className="font-medium">{service?.name}</TableCell>
+                            <TableCell>{session.completedAt.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</TableCell>
                         </TableRow>
                     )
                 }) : (
                     <TableRow>
-                        <TableCell colSpan={2} className="text-center h-24">No hay sesiones completadas todavía.</TableCell>
+                        <TableCell colSpan={2} className="text-center h-24 text-muted-foreground">Sin sesiones registradas.</TableCell>
                     </TableRow>
                 )}
             </TableBody>

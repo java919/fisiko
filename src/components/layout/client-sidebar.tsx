@@ -24,24 +24,24 @@ export function ClientSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/dashboard", label: "Panel", icon: LayoutDashboard },
-    { href: "/booking", label: "Reservar sesión", icon: CalendarPlus },
-    { href: "/exercises", label: "Mis Ejercicios", icon: Dumbbell },
-    { href: "/history", label: "Historial de Sesiones", icon: History },
+    { href: "/dashboard", label: "Mi Panel", icon: LayoutDashboard },
+    { href: "/dashboard/booking", label: "Reservar Sesión", icon: CalendarPlus },
+    { href: "/dashboard/exercises", label: "Mis Ejercicios", icon: Dumbbell },
+    { href: "/dashboard/history", label: "Historial", icon: History },
   ];
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="p-4">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Logo />
-          <span className="font-headline text-lg font-semibold text-sidebar-foreground">
+          <Logo className="h-8 w-8" />
+          <span className="font-headline text-xl font-bold text-sidebar-foreground">
             FISIKO
           </span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="px-2">
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton

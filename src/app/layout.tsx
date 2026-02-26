@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'FISIKO',
-  description: 'Tu centro de fisioterapia y bienestar.',
+  title: 'FISIKO | Fisioterapia y Bienestar',
+  description: 'Tu centro de fisioterapia, pilates y bienestar integral.',
 };
 
 export default function RootLayout({

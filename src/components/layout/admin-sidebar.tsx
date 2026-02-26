@@ -25,30 +25,30 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/admin", label: "Panel", icon: LayoutDashboard },
+    { href: "/admin", label: "Panel Principal", icon: LayoutDashboard },
     { href: "/admin/clients", label: "Clientes", icon: Users },
     { href: "/admin/calendar", label: "Calendario", icon: Calendar },
     { href: "/admin/content", label: "Contenido", icon: FileText },
-    { href: "/admin/settings/emails", label: "Emails", icon: Mail },
+    { href: "/admin/settings/emails", label: "Plantillas Email", icon: Mail },
   ];
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="p-4">
         <Link href="/admin" className="flex items-center gap-2">
-          <Logo />
-          <span className="font-headline text-lg font-semibold text-sidebar-foreground">
+          <Logo className="h-8 w-8" />
+          <span className="font-headline text-xl font-bold text-sidebar-foreground">
             FISIKO
           </span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="px-2">
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname.startsWith(item.href) && (item.href.length > 6 ? true : pathname === item.href)}
+                isActive={pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href))}
                 tooltip={item.label}
               >
                 <Link href={item.href}>
@@ -63,7 +63,7 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Cerrar Sesión">
+            <SidebarMenuButton asChild tooltip="Cerrar Sesión" className="text-destructive hover:text-destructive">
               <Link href="/login">
                 <LogOut />
                 <span>Cerrar Sesión</span>
