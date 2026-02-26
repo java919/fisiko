@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -71,7 +73,7 @@ export default function ClientDashboard() {
                         {services.find(s => s.id === upcomingAppointment.serviceId)?.name}
                     </CardDescription>
                 </div>
-              </Header>
+              </CardHeader>
               <CardContent>
                 <p className="font-semibold text-lg">{upcomingAppointment.startTime.toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' })}</p>
               </CardContent>

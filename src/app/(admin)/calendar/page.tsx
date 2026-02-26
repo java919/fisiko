@@ -1,2 +1,1 @@
-// Archivo movido a src/app/admin/calendar/page.tsx
-export default function ObsoletePage() { return null; }
+// Archivo desactivado para evitar conflictos de rutas paralelas con /src/app/admin/calendar/page.tsx
