@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -22,6 +23,11 @@ import {
 
 export function ClientSidebar() {
   const pathname = usePathname();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
@@ -49,7 +55,7 @@ export function ClientSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={mounted ? pathname === item.href : false}
                 tooltip={item.label}
                 className="h-12 text-base rounded-lg transition-all"
               >

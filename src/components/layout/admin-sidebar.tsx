@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -25,6 +26,11 @@ import {
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     { href: "/admin", label: "Panel de Control", icon: LayoutDashboard },
@@ -55,7 +61,7 @@ export function AdminSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={mounted ? pathname === item.href : false}
                 tooltip={item.label}
                 className="h-12 text-base rounded-lg transition-all"
               >
