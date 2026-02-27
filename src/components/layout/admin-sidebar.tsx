@@ -20,6 +20,7 @@ import {
   Mail,
   LogOut,
   Euro,
+  Tag,
 } from "lucide-react";
 
 export function AdminSidebar() {
@@ -29,6 +30,7 @@ export function AdminSidebar() {
     { href: "/admin", label: "Panel de Control", icon: LayoutDashboard },
     { href: "/admin/clients", label: "Gestión de Clientes", icon: Users },
     { href: "/admin/calendar", label: "Calendario", icon: Calendar },
+    { href: "/admin/services", label: "Servicios y Bonos", icon: Tag },
     { href: "/admin/billing", label: "Facturación", icon: Euro },
     { href: "/admin/content", label: "Contenido Exclusivo", icon: FileText },
     { href: "/admin/settings/emails", label: "Plantillas de Email", icon: Mail },
