@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react";
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -8,9 +9,20 @@ import { Progress } from "@/components/ui/progress";
 import { Bell, CalendarPlus, Video, Activity } from "lucide-react";
 
 export default function ClientDashboard() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   const currentUser = clients.find(c => c.id === '1');
   const userServices = clientServices.filter(cs => cs.clientId === currentUser?.id);
-  const upcomingAppointment = calendarSlots.find(slot => slot.bookedBy === currentUser?.id && slot.startTime > new Date());
+  const now = new Date();
+  const upcomingAppointment = calendarSlots.find(slot => slot.bookedBy === currentUser?.id && slot.startTime > now);
   
   if (!currentUser) return null;
 

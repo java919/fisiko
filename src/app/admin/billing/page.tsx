@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Euro, TrendingUp, Calendar, Clock } from "lucide-react";
 import { sessions } from "@/lib/data";
@@ -7,6 +8,14 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 export default function BillingPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   const now = new Date();
   
   // Cálculo de facturación

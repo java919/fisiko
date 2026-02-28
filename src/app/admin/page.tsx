@@ -1,11 +1,23 @@
+"use client"
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, Activity, MessageSquare } from "lucide-react";
 import { clients, services, sessions, calendarSlots } from "@/lib/data";
 
 export default function AdminDashboard() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const now = new Date();
   const totalClients = clients.length;
   const activeServices = services.length;
-  const sessionsThisMonth = sessions.filter(s => s.completedAt.getMonth() === new Date().getMonth()).length;
+  const sessionsThisMonth = sessions.filter(s => s.completedAt.getMonth() === now.getMonth()).length;
 
   return (
     <div className="space-y-6">
@@ -80,7 +92,7 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {calendarSlots.filter(s => s.isBooked && s.startTime > new Date()).slice(0, 3).map(slot => {
+                    {calendarSlots.filter(s => s.isBooked && s.startTime > now).slice(0, 3).map(slot => {
                         const client = clients.find(c => c.id === slot.bookedBy);
                         const service = services.find(s => s.id === slot.serviceId);
                         return (
