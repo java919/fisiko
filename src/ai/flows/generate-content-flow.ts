@@ -19,36 +19,37 @@ const GenerateContentOutputSchema = z.object({
 });
 export type GenerateContentOutput = z.infer<typeof GenerateContentOutputSchema>;
 
+const prompt = ai.definePrompt({
+  name: 'contentPrompt',
+  input: { schema: GenerateContentInputSchema },
+  output: { schema: GenerateContentOutputSchema },
+  prompt: `Eres un experto fisioterapeuta y coach de bienestar de la clínica FISIKO. 
+  Tu objetivo es generar contenido de alta calidad (ejercicios, dietas o guías) basado en las instrucciones del profesional.
+  
+  Instrucciones del profesional: {{{instructions}}}
+  Tipo de contenido: {{{type}}}
+  {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
+  
+  Reglas:
+  1. Tono profesional, empático y motivador.
+  2. Si es un ejercicio, incluye pasos claros y precauciones.
+  3. Si es una dieta, enfócate en la salud y recuperación.
+  4. El título debe ser corto y directo.`,
+});
+
+const flow = ai.defineFlow(
+  {
+    name: 'generateHealthContent',
+    inputSchema: GenerateContentInputSchema,
+    outputSchema: GenerateContentOutputSchema,
+  },
+  async (input) => {
+    const { output } = await prompt(input);
+    if (!output) throw new Error('No se pudo generar el contenido');
+    return output;
+  }
+);
+
 export async function generateHealthContent(input: GenerateContentInput): Promise<GenerateContentOutput> {
-  const flow = ai.defineFlow(
-    {
-      name: 'generateHealthContent',
-      inputSchema: GenerateContentInputSchema,
-      outputSchema: GenerateContentOutputSchema,
-    },
-    async (input) => {
-      const prompt = ai.definePrompt({
-        name: 'contentPrompt',
-        input: { schema: GenerateContentInputSchema },
-        output: { schema: GenerateContentOutputSchema },
-        prompt: `Eres un experto fisioterapeuta y coach de bienestar de la clínica FISIKO. 
-        Tu objetivo es generar contenido de alta calidad (ejercicios, dietas o guías) basado en las instrucciones del profesional.
-        
-        Instrucciones del profesional: {{{instructions}}}
-        Tipo de contenido: {{{type}}}
-        {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
-        
-        Reglas:
-        1. Tono profesional, empático y motivador.
-        2. Si es un ejercicio, incluye pasos claros y precauciones.
-        3. Si es una dieta, enfócate en la salud y recuperación.
-        4. El título debe ser corto y directo.`,
-      });
-
-      const { output } = await prompt(input);
-      return output!;
-    }
-  );
-
   return flow(input);
 }
