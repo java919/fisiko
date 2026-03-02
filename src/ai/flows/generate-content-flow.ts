@@ -23,6 +23,26 @@ const prompt = ai.definePrompt({
   name: 'contentPrompt',
   input: { schema: GenerateContentInputSchema },
   output: { schema: GenerateContentOutputSchema },
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_HATE_SPEECH',
+        threshold: 'BLOCK_ONLY_HIGH',
+      },
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_NONE',
+      },
+      {
+        category: 'HARM_CATEGORY_HARASSMENT',
+        threshold: 'BLOCK_ONLY_HIGH',
+      },
+      {
+        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+        threshold: 'BLOCK_ONLY_HIGH',
+      },
+    ],
+  },
   prompt: `Eres un experto fisioterapeuta y coach de bienestar de la clínica FISIKO. 
   Tu objetivo es generar contenido de alta calidad (ejercicios, dietas o guías) basado en las instrucciones del profesional.
   
@@ -33,8 +53,9 @@ const prompt = ai.definePrompt({
   Reglas:
   1. Tono profesional, empático y motivador.
   2. Si es un ejercicio, incluye pasos claros y precauciones.
-  3. Si es una dieta, enfócate en la salud y recuperación.
-  4. El título debe ser corto y directo.`,
+  3. Si es una dieta, enfócate en la salud y recuperación, evitando promesas mágicas.
+  4. El título debe ser corto y directo.
+  5. Genera el contenido siempre en Español.`,
 });
 
 const flow = ai.defineFlow(

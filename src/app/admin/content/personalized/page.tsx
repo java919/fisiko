@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react";
@@ -93,11 +92,19 @@ export default function PersonalizedContentPage() {
                 type: formType,
                 clientName: firstClient
             });
-            setFormTitle(result.title);
-            setFormContent(result.content);
-            toast({ title: "Plan generado", description: "La IA ha creado una propuesta personalizada." });
-        } catch (error) {
-            toast({ variant: "destructive", title: "Error", description: "La IA no pudo responder ahora mismo." });
+            
+            if (result) {
+                setFormTitle(result.title);
+                setFormContent(result.content);
+                toast({ title: "Plan generado", description: "La IA ha creado una propuesta personalizada." });
+            }
+        } catch (error: any) {
+            console.error("Error generating content:", error);
+            toast({ 
+                variant: "destructive", 
+                title: "Error de IA", 
+                description: "La IA no pudo procesar la solicitud. Prueba a ser más específico o evita términos médicos complejos." 
+            });
         } finally {
             setIsGenerating(false);
         }
@@ -134,16 +141,20 @@ export default function PersonalizedContentPage() {
                                         <Sparkles className="h-4 w-4" />
                                         <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO</span>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Input 
-                                            placeholder="Ej: Rutina de estiramientos para Juan, operado de menisco..." 
-                                            value={aiPrompt}
-                                            onChange={(e) => setAiPrompt(e.target.value)}
-                                        />
-                                        <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt}>
-                                            {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
-                                            Generar
-                                        </Button>
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Escribe qué necesitas generar (ej: Dieta hipocalórica para Luis)</Label>
+                                        <div className="flex gap-2">
+                                            <Input 
+                                                id="ai-prompt"
+                                                placeholder="Ej: Rutina de estiramientos para Juan, operado de menisco..." 
+                                                value={aiPrompt}
+                                                onChange={(e) => setAiPrompt(e.target.value)}
+                                            />
+                                            <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt}>
+                                                {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
+                                                Generar
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
 
