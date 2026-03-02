@@ -7,7 +7,6 @@ import Link from "next/link";
 import { clients, clientServices, services, calendarSlots } from "@/lib/data";
 import { Progress } from "@/components/ui/progress";
 import { Bell, CalendarPlus, Video, Activity, Cake } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function ClientDashboard() {
@@ -39,16 +38,15 @@ export default function ClientDashboard() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="flex items-center gap-2">
               <Cake className="h-5 w-5 text-primary shrink-0" />
-              <Label htmlFor="birthday" className="text-xs font-bold uppercase whitespace-nowrap">Mi Cumpleaños</Label>
+              <Label className="text-xs font-bold uppercase whitespace-nowrap">Mi Cumpleaños</Label>
             </div>
-            <div className="flex w-full gap-2">
-              <Input 
-                id="birthday"
-                type="date" 
-                defaultValue={currentUser.birthday} 
-                className="h-9 w-full sm:w-40 text-xs bg-background" 
-              />
-              <Button size="sm" variant="outline" className="h-9 text-xs shrink-0">Guardar</Button>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <span className="text-sm font-bold text-foreground bg-background px-4 py-2 rounded-lg border border-primary/10 shadow-inner">
+                {currentUser.birthday ? new Date(currentUser.birthday).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) : 'No definido'}
+              </span>
+              <p className="text-[10px] text-muted-foreground italic leading-tight max-w-[120px]">
+                * Para modificar tu fecha, contacta con recepción.
+              </p>
             </div>
           </div>
         </Card>
