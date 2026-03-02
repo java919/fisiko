@@ -1,7 +1,7 @@
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
- * Configurado con permisos de nivel experto para profesionales de la salud.
+ * Configurado con permisos de nivel experto para profesionales de la salud (FISIKO).
  */
 
 import { ai } from '@/ai/genkit';
@@ -26,38 +26,23 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateContentOutputSchema },
   config: {
     safetySettings: [
-      {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_CIVIC_INTEGRITY',
-        threshold: 'BLOCK_NONE',
-      },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_CIVIC_INTEGRITY', threshold: 'BLOCK_NONE' },
     ],
   },
-  prompt: `Eres un asistente experto para un fisioterapeuta y nutricionista profesional de la clínica FISIKO. 
+  prompt: `Eres un asistente experto para un profesional de la salud (fisioterapeuta y nutricionista) de la clínica FISIKO. 
   Tu tarea es redactar contenido técnico, preciso y motivador basado en las instrucciones del experto.
   
   Instrucciones del profesional: {{{instructions}}}
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  Reglas de generación CRÍTICAS:
+  REGLAS CRÍTICAS PARA EL ASISTENTE:
   1. Tono clínico, empático y altamente profesional.
-  2. NO censures términos anatómicos, médicos o de patologías (ej: inflamación, menisco, lesión, dieta hipocalórica, tratamiento de dolor). Este contenido es supervisado por un experto colegiado.
+  2. ERES UN ASISTENTE PARA UN PROFESIONAL COLEGIADO. NO DEBES CENSURAR ni bloquear términos anatómicos, médicos, patologías o dietas terapéuticas (ej: inflamación, rotura, dieta hipocalórica, tratamiento del dolor). El experto supervisa todo.
   3. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad.
   4. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
   5. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").

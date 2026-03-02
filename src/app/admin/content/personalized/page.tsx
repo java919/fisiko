@@ -69,7 +69,7 @@ export default function PersonalizedContentPage() {
         setFormTitle(content.title);
         setFormContent(content.content);
         setFormType(content.type);
-        setSelectedClients(content.assignedClientIds);
+        setSelectedClients(content.assignedClientIds || []);
         setIsDialogOpen(true);
     };
 
@@ -99,14 +99,14 @@ export default function PersonalizedContentPage() {
             if (result) {
                 setFormTitle(result.title);
                 setFormContent(result.content);
-                toast({ title: "Plan generado por IA", description: "Se ha creado una propuesta técnica basada en tu prompt." });
+                toast({ title: "Plan generado por IA", description: "Se ha creado una propuesta técnica basada en tu instrucción." });
             }
         } catch (error: any) {
             console.error("Error generating content:", error);
             toast({ 
                 variant: "destructive", 
                 title: "Error de Asistente IA", 
-                description: "No se pudo generar el contenido. Prueba a ser más específico o profesional en tu instrucción." 
+                description: "No se pudo generar el contenido. Prueba a ser más específico." 
             });
         } finally {
             setIsGenerating(false);
@@ -121,7 +121,7 @@ export default function PersonalizedContentPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">Planes Personalizados</h1>
+                    <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight text-primary">Planes Personalizados</h1>
                     <p className="text-sm text-muted-foreground">Crea y asigna dietas o rutinas exclusivas para clientes específicos.</p>
                 </div>
                 <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -133,10 +133,10 @@ export default function PersonalizedContentPage() {
                             <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto w-[95vw] rounded-xl">
+                    <DialogContent className="max-w-3xl max-h-[95vh] overflow-y-auto w-[95vw] rounded-xl p-4 sm:p-6">
                         <form onSubmit={handleSave}>
                             <DialogHeader>
-                                <DialogTitle>{editingContent ? 'Editar Plan' : 'Crear Contenido Personalizado'}</DialogTitle>
+                                <DialogTitle>{editingContent ? 'Editar Plan Personalizado' : 'Crear Contenido Personalizado'}</DialogTitle>
                                 <DialogDescription>Usa el Asistente IA FISIKO para redactar planes técnicos rápidamente.</DialogDescription>
                             </DialogHeader>
                             
@@ -144,10 +144,10 @@ export default function PersonalizedContentPage() {
                                 <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                                     <div className="flex items-center gap-2 text-primary">
                                         <Sparkles className="h-4 w-4" />
-                                        <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO</span>
+                                        <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO (Sin Censura)</span>
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones para la IA (ej: Dieta antiinflamatoria para rodilla)</Label>
+                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones (ej: Protocolo rehabilitación menisco)</Label>
                                         <div className="flex flex-col sm:flex-row gap-2">
                                             <Input 
                                                 id="ai-prompt"
@@ -181,12 +181,12 @@ export default function PersonalizedContentPage() {
 
                                 <div className="space-y-2">
                                     <Label htmlFor="content">Contenido Técnico</Label>
-                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[180px]" placeholder="Detalla los ejercicios o la dieta aquí..." required />
+                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[200px]" placeholder="Detalla los ejercicios o la dieta aquí..." required />
                                 </div>
 
                                 <div className="space-y-3">
                                     <Label>Asignar a Clientes</Label>
-                                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md bg-muted/5">
+                                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2 max-h-[150px] overflow-y-auto p-3 border rounded-md bg-muted/5">
                                         {clients.map(client => (
                                             <div key={client.id} className="flex items-center space-x-2 p-1.5 hover:bg-muted/50 rounded transition-colors">
                                                 <Checkbox id={`c-${client.id}`} checked={selectedClients.includes(client.id)} onCheckedChange={() => toggleClient(client.id)} />
@@ -226,8 +226,12 @@ export default function PersonalizedContentPage() {
                                     <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onSelect={() => handleEdit(content)}>Editar Plan</DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>Eliminar</DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={(e) => { e.preventDefault(); handleEdit(content); }}>
+                                        Editar Plan
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>
+                                        Eliminar
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </CardHeader>
