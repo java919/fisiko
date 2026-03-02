@@ -1,4 +1,3 @@
-
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,16 +11,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { CalendarSlot } from "@/lib/types";
 
 export default function AdminCalendarPage() {
   const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [slots, setSlots] = useState(initialSlots);
+  const [slots, setSlots] = useState<CalendarSlot[]>(initialSlots);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
 
   // Form state
-  const [newSlotService, setNewSlotService] = useState(allServices[0].id);
+  const [newSlotService, setNewSlotService] = useState("generic"); // "generic" means no service specified
   const [newSlotTime, setNewSlotTime] = useState("09:00");
 
   const slotsForSelectedDay = slots.filter(
@@ -39,11 +39,11 @@ export default function AdminCalendarPage() {
     const endTime = new Date(startTime);
     endTime.setHours(startTime.getHours() + 1);
 
-    const newSlot = {
+    const newSlot: CalendarSlot = {
       id: `slot-${Date.now()}`,
       startTime,
       endTime,
-      serviceId: newSlotService,
+      serviceId: newSlotService === "generic" ? undefined : newSlotService,
       isBooked: false
     };
 
@@ -73,7 +73,7 @@ export default function AdminCalendarPage() {
           id: `quick-${date.getTime()}-${index}`,
           startTime: start,
           endTime: end,
-          serviceId: allServices[0].id, // Default to first service
+          serviceId: undefined, // Default to generic/free slots for quick setup
           isBooked: false
         };
       });
@@ -93,7 +93,7 @@ export default function AdminCalendarPage() {
         setSlots([...slots, ...filteredNewSlots]);
         toast({
           title: "Horario configurado",
-          description: `Se han añadido ${filteredNewSlots.length} huecos para la jornada de mañana.`
+          description: `Se han añadido ${filteredNewSlots.length} huecos libres para la jornada de mañana.`
         });
       }
       setIsConfiguring(false);
@@ -108,55 +108,68 @@ export default function AdminCalendarPage() {
           <p className="text-sm text-muted-foreground">Control de disponibilidad y reservas del centro.</p>
         </div>
         
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button size="lg" className="font-bold shadow-md w-full sm:w-auto">
-              <PlusCircle className="mr-2 h-5 w-5" />
-              Nuevo Hueco
+        <div className="flex flex-col sm:flex-row gap-2">
+           <Button 
+              variant="outline"
+              onClick={handleQuickSetup}
+              disabled={isConfiguring}
+              className="border-primary/50 text-primary hover:bg-primary/5 font-bold shadow-sm"
+            >
+              {isConfiguring ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
+              Mañana Rápida (Libre)
             </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <form onSubmit={handleCreateSlot}>
-              <DialogHeader>
-                <DialogTitle>Programar Nuevo Hueco</DialogTitle>
-                <DialogDescription>
-                  Añade disponibilidad manual al calendario para el {date?.toLocaleDateString('es-ES')}.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="service">Servicio</Label>
-                  <Select value={newSlotService} onValueChange={setNewSlotService}>
-                    <SelectTrigger id="service">
-                      <SelectValue placeholder="Selecciona servicio" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allServices.map(s => (
-                        <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="time">Hora de Inicio</Label>
-                  <Input 
-                    id="time" 
-                    type="time" 
-                    value={newSlotTime} 
-                    onChange={(e) => setNewSlotTime(e.target.value)} 
-                    required 
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit" className="w-full">
-                  <Save className="mr-2 h-4 w-4" />
-                  Guardar Disponibilidad
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="default" className="font-bold shadow-md w-full sm:w-auto">
+                  <PlusCircle className="mr-2 h-5 w-5" />
+                  Nuevo Hueco
                 </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <form onSubmit={handleCreateSlot}>
+                  <DialogHeader>
+                    <DialogTitle>Programar Nuevo Hueco</DialogTitle>
+                    <DialogDescription>
+                      Añade disponibilidad al calendario para el {date?.toLocaleDateString('es-ES')}.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="service">Servicio Condicionante</Label>
+                      <Select value={newSlotService} onValueChange={setNewSlotService}>
+                        <SelectTrigger id="service">
+                          <SelectValue placeholder="Selecciona servicio" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="generic">Hueco Libre (Cualquier servicio)</SelectItem>
+                          {allServices.map(s => (
+                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="time">Hora de Inicio</Label>
+                      <Input 
+                        id="time" 
+                        type="time" 
+                        value={newSlotTime} 
+                        onChange={(e) => setNewSlotTime(e.target.value)} 
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit" className="w-full">
+                      <Save className="mr-2 h-4 w-4" />
+                      Guardar Disponibilidad
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -197,14 +210,18 @@ export default function AdminCalendarPage() {
                           <span className="text-xs sm:text-sm">{slot.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-base sm:text-lg truncate">{service?.name}</p>
+                          <p className="font-bold text-base sm:text-lg truncate">
+                            {service ? service.name : "Hueco Libre (Genérico)"}
+                          </p>
                           {slot.isBooked ? (
                             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                               <User className="h-3.5 w-3.5 shrink-0" />
                               <span className="font-medium truncate">{client?.name}</span>
                             </div>
                           ) : (
-                            <p className="text-[10px] text-green-600 font-bold uppercase tracking-wider mt-1">Disponible</p>
+                            <p className="text-[10px] text-green-600 font-bold uppercase tracking-wider mt-1">
+                              {service ? "Disponible para " + service.name : "Disponible para cualquier servicio"}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -212,7 +229,9 @@ export default function AdminCalendarPage() {
                         {slot.isBooked ? (
                           <Badge className="px-3 py-1">Reservado</Badge>
                         ) : (
-                          <Badge variant="outline" className="px-3 py-1 text-green-600 border-green-200 bg-green-50">Libre</Badge>
+                          <Badge variant="outline" className="px-3 py-1 text-green-600 border-green-200 bg-green-50">
+                            Libre
+                          </Badge>
                         )}
                         <Button variant="ghost" size="sm" className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">Editar</Button>
                       </div>
@@ -231,7 +250,7 @@ export default function AdminCalendarPage() {
                     disabled={isConfiguring}
                   >
                     {isConfiguring ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Clock className="mr-2 h-4 w-4" />}
-                    Configurar horario rápido (Mañana)
+                    Configurar horario libre rápido (Mañana)
                   </Button>
                 </div>
               )}

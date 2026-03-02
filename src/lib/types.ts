@@ -32,7 +32,7 @@ export type CalendarSlot = {
     id: string;
     startTime: Date;
     endTime: Date;
-    serviceId: string;
+    serviceId?: string; // Opcional para huecos genéricos/libres
     isBooked: boolean;
     bookedBy?: string; // clientId
 };
