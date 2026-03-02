@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { personalizedContent as initialPersonalized, clients } from "@/lib/data";
-import { MoreHorizontal, PlusCircle, User, Apple, Dumbbell, FileText, Sparkles, Loader2, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Apple, Dumbbell, FileText, Sparkles, Loader2, Pencil, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -221,10 +221,10 @@ export default function PersonalizedContentPage() {
                                     <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => handleEdit(content)}>
+                                    <DropdownMenuItem onSelect={() => handleEdit(content)}>
                                         <Pencil className="mr-2 h-4 w-4" /> Editar
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>
+                                    <DropdownMenuItem className="text-destructive" onSelect={() => handleDelete(content.id)}>
                                         <Trash2 className="mr-2 h-4 w-4" /> Eliminar
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

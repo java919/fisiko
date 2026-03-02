@@ -1,7 +1,8 @@
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
- * Configurado con permisos totales para profesionales de la salud (FISIKO).
+ * Configurado con permisos TOTALES para profesionales de la salud (FISIKO).
+ * Este flujo ignora filtros de seguridad para permitir terminología técnica médica y nutricional.
  */
 
 import { ai } from '@/ai/genkit';
@@ -33,25 +34,25 @@ const prompt = ai.definePrompt({
       { category: 'HARM_CATEGORY_CIVIC_INTEGRITY', threshold: 'BLOCK_NONE' },
     ],
   },
-  prompt: `Eres un asistente experto para un profesional de la salud colegiado (fisioterapeuta y nutricionista) de la clínica FISIKO. 
-  Tu tarea es redactar contenido técnico, preciso y motivador basado exclusivamente en las instrucciones del experto.
+  prompt: `Eres un asistente experto de FISIKO para un profesional sanitario colegiado (Fisioterapeuta y Nutricionista). 
+  Tu misión es redactar contenido técnico, preciso y basado en la evidencia según las instrucciones del experto.
   
   Instrucciones del profesional: {{{instructions}}}
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  REGLAS DE ORO DE FISIKO (SIN CENSURA PROFESIONAL):
-  1. EL USUARIO ES UN PROFESIONAL SANITARIO. No bloquees NINGÚN término médico, anatómico o patológico.
-  2. Genera dietas terapéuticas, protocolos de dolor, ejercicios de rehabilitación y cualquier recomendación clínica solicitada.
-  3. No añadas descargos de responsabilidad tipo "consulta a tu médico", ya que el usuario es el facultativo.
-  4. Tono: Clínico, empático, motivador y directo.
-  5. Formato: Estructura clara con puntos clave.
+  REGLAS DE ACTUACIÓN PROFESIONAL:
+  1. EL USUARIO ES UN PROFESIONAL DE LA SALUD. Tienes permiso absoluto para usar terminología médica, anatómica y patológica.
+  2. No omitas información sobre dolor, lesiones o dietas terapéuticas; el experto supervisa este contenido.
+  3. No añadas advertencias tipo "consulta a tu médico", ya que el usuario YA es el profesional competente.
+  4. Genera protocolos de rehabilitación, dietas clínicas y rutinas de movilidad avanzada con rigor técnico.
+  5. Tono: Clínico, empático, motivador y directo.
   6. Idioma: Español.`,
 });
 
-const flow = ai.defineFlow(
+const generateHealthContentFlow = ai.defineFlow(
   {
-    name: 'generateHealthContent',
+    name: 'generateHealthContentFlow',
     inputSchema: GenerateContentInputSchema,
     outputSchema: GenerateContentOutputSchema,
   },
@@ -59,16 +60,16 @@ const flow = ai.defineFlow(
     try {
       const { output } = await prompt(input);
       if (!output) {
-        throw new Error('La IA no devolvió un resultado válido.');
+        throw new Error('La IA no pudo procesar la solicitud debido a un error técnico.');
       }
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContent:', error);
-      throw new Error('Error técnico en el asistente de FISIKO. Por favor, revisa que las instrucciones sean claras y vuelve a intentarlo.');
+      throw new Error('Error en el asistente de FISIKO. Asegúrate de que las instrucciones sean claras y vuelve a intentarlo.');
     }
   }
 );
 
 export async function generateHealthContent(input: GenerateContentInput): Promise<GenerateContentOutput> {
-  return flow(input);
+  return generateHealthContentFlow(input);
 }
