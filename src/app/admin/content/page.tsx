@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { serviceContent, services, personalizedContent as initialPersonalized, clients } from "@/lib/data";
-import { MoreHorizontal, PlusCircle, User, Apple, Dumbbell, FileText } from "lucide-react";
+import { MoreHorizontal, PlusCircle, User, Apple, Dumbbell, FileText, Sparkles, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
@@ -15,25 +15,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { generateHealthContent } from "@/ai/flows/generate-content-flow";
 
 export default function ContentPage() {
     const { toast } = useToast();
     const [persContent, setPersContent] = useState(initialPersonalized);
     const [isPersDialogOpen, setIsPersDialogOpen] = useState(false);
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
+    const [isGenerating, setIsGenerating] = useState(false);
+    
+    // Form states for AI population
+    const [formTitle, setFormTitle] = useState("");
+    const [formContent, setFormContent] = useState("");
+    const [formType, setFormType] = useState<'diet' | 'exercise' | 'other'>('exercise');
+    const [aiPrompt, setAiPrompt] = useState("");
 
     const handleSavePersonalized = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const title = formData.get("title") as string;
-        const type = formData.get("type") as 'exercise' | 'diet' | 'other';
-        const content = formData.get("content") as string;
-
+        
         const newContent = {
             id: `p-${Date.now()}`,
-            title,
-            type,
-            content,
+            title: formTitle,
+            type: formType,
+            content: formContent,
             assignedClientIds: selectedClients,
             createdAt: new Date(),
         };
@@ -41,7 +45,43 @@ export default function ContentPage() {
         setPersContent([newContent, ...persContent]);
         toast({ title: "Contenido Personalizado Creado", description: `Se ha asignado a ${selectedClients.length} clientes.` });
         setIsPersDialogOpen(false);
+        resetForm();
+    };
+
+    const resetForm = () => {
+        setFormTitle("");
+        setFormContent("");
+        setFormType("exercise");
+        setAiPrompt("");
         setSelectedClients([]);
+    };
+
+    const handleGenerateAI = async () => {
+        if (!aiPrompt) {
+            toast({ variant: "destructive", title: "Instrucciones vacías", description: "Por favor, escribe qué quieres que la IA genere." });
+            return;
+        }
+
+        setIsGenerating(true);
+        try {
+            const firstSelectedClient = selectedClients.length > 0 
+                ? clients.find(c => c.id === selectedClients[0])?.name 
+                : undefined;
+
+            const result = await generateHealthContent({
+                instructions: aiPrompt,
+                type: formType,
+                clientName: firstSelectedClient
+            });
+
+            setFormTitle(result.title);
+            setFormContent(result.content);
+            toast({ title: "¡Contenido generado!", description: "La IA ha redactado una propuesta. Puedes editarla ahora." });
+        } catch (error) {
+            toast({ variant: "destructive", title: "Error de IA", description: "No se pudo generar el contenido. Inténtalo de nuevo." });
+        } finally {
+            setIsGenerating(false);
+        }
     };
 
     const toggleClientSelection = (clientId: string) => {
@@ -124,36 +164,86 @@ export default function ContentPage() {
                             </div>
                             <Dialog open={isPersDialogOpen} onOpenChange={setIsPersDialogOpen}>
                                 <DialogTrigger asChild>
-                                    <Button className="font-bold"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Personalizado</Button>
+                                    <Button onClick={resetForm} className="font-bold"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Personalizado</Button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-2xl">
+                                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                                     <form onSubmit={handleSavePersonalized}>
                                         <DialogHeader>
                                             <DialogTitle>Crear Contenido Personalizado</DialogTitle>
-                                            <DialogDescription>Define el contenido y selecciona a qué clientes se le mostrará.</DialogDescription>
+                                            <DialogDescription>Define el contenido manualmente o utiliza nuestra IA para ayudarte.</DialogDescription>
                                         </DialogHeader>
+                                        
                                         <div className="grid gap-6 py-4">
+                                            {/* AI ASSISTANT SECTION */}
+                                            <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
+                                                <div className="flex items-center gap-2 text-primary">
+                                                    <Sparkles className="h-4 w-4" />
+                                                    <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO</span>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="aiPrompt" className="text-xs">Instrucciones para la IA (ej: "Rutina de movilidad para Juan, operado de menisco")</Label>
+                                                    <div className="flex gap-2">
+                                                        <Input 
+                                                            id="aiPrompt" 
+                                                            placeholder="Describe lo que necesitas..." 
+                                                            value={aiPrompt}
+                                                            onChange={(e) => setAiPrompt(e.target.value)}
+                                                            className="bg-background"
+                                                        />
+                                                        <Button 
+                                                            type="button" 
+                                                            variant="secondary" 
+                                                            onClick={handleGenerateAI}
+                                                            disabled={isGenerating || !aiPrompt}
+                                                            className="shrink-0"
+                                                        >
+                                                            {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
+                                                            Generar
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div className="grid gap-4 md:grid-cols-2">
                                                 <div className="space-y-2">
                                                     <Label htmlFor="title">Título del Plan</Label>
-                                                    <Input id="title" name="title" placeholder="Ej: Dieta Keto para Juan" required />
+                                                    <Input 
+                                                        id="title" 
+                                                        value={formTitle}
+                                                        onChange={(e) => setFormTitle(e.target.value)}
+                                                        placeholder="Ej: Dieta Keto para Juan" 
+                                                        required 
+                                                    />
                                                 </div>
                                                 <div className="space-y-2">
                                                     <Label htmlFor="type">Tipo de Contenido</Label>
-                                                    <select name="type" className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                    <select 
+                                                        value={formType}
+                                                        onChange={(e) => setFormType(e.target.value as any)}
+                                                        className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                                                    >
                                                         <option value="diet">Dieta</option>
                                                         <option value="exercise">Ejercicio</option>
                                                         <option value="other">Otro</option>
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div className="space-y-2">
                                                 <Label htmlFor="content">Descripción / Instrucciones</Label>
-                                                <Textarea id="content" name="content" placeholder="Escribe aquí los detalles del plan..." className="min-h-[120px]" required />
+                                                <Textarea 
+                                                    id="content" 
+                                                    value={formContent}
+                                                    onChange={(e) => setFormContent(e.target.value)}
+                                                    placeholder="Escribe aquí los detalles del plan..." 
+                                                    className="min-h-[150px]" 
+                                                    required 
+                                                />
                                             </div>
+
                                             <div className="space-y-3">
                                                 <Label>Asignar a Clientes</Label>
-                                                <div className="grid grid-cols-2 gap-2 max-h-[150px] overflow-y-auto p-2 border rounded-md">
+                                                <div className="grid grid-cols-2 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md">
                                                     {clients.map(client => (
                                                         <div key={client.id} className="flex items-center space-x-2">
                                                             <Checkbox 
@@ -167,6 +257,7 @@ export default function ContentPage() {
                                                 </div>
                                             </div>
                                         </div>
+
                                         <DialogFooter>
                                             <Button type="button" variant="outline" onClick={() => setIsPersDialogOpen(false)}>Cancelar</Button>
                                             <Button type="submit" disabled={selectedClients.length === 0}>Publicar Plan</Button>
