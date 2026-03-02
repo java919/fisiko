@@ -1,4 +1,4 @@
-import type { Service, Client, ClientService, Session, ServiceContent, EmailTemplate, CalendarSlot } from './types';
+import type { Service, Client, ClientService, Session, ServiceContent, EmailTemplate, CalendarSlot, PersonalizedContent } from './types';
 
 export const services: Service[] = [
   { id: 'physio', name: 'Fisioterapia', description: 'Sesiones de fisioterapia para recuperación y bienestar integral.', price: 55 },
@@ -36,6 +36,29 @@ export const serviceContent: ServiceContent[] = [
     { id: 'c1', serviceId: 'pilates', title: 'Fundamentos del Core en Reformer', type: 'video', content: 'Iniciación a los movimientos básicos en la máquina de Pilates.', imageUrl: 'https://images.unsplash.com/photo-1747240549807-fc3962949818?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'pilates reformer' },
     { id: 'c2', serviceId: 'pilates', title: 'La Respiración en FISIKO', type: 'text', content: 'Aprende a coordinar tu respiración con cada esfuerzo para maximizar resultados.' },
     { id: 'c3', serviceId: 'training', title: 'Rutina Semanal de Fuerza', type: 'image', content: 'Guía visual para tus entrenamientos de apoyo en casa.', imageUrl: 'https://images.unsplash.com/photo-1692369608191-005af0051fe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600', imageHint: 'gym workout' },
+];
+
+export const personalizedContent: PersonalizedContent[] = [
+    { 
+        id: 'p1', 
+        assignedClientIds: ['1'], 
+        title: 'Tu Dieta Antiinflamatoria', 
+        type: 'diet', 
+        content: 'Juan, aquí tienes tu plan nutricional específico para mejorar la recuperación de tu lesión de rodilla.',
+        imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+        imageHint: 'healthy food',
+        createdAt: new Date()
+    },
+    { 
+        id: 'p2', 
+        assignedClientIds: ['1', '2'], 
+        title: 'Ejercicios de Movilidad de Cadera', 
+        type: 'exercise', 
+        content: 'Rutina personalizada para realizar cada mañana al despertar.',
+        imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+        imageHint: 'yoga stretching',
+        createdAt: new Date()
+    }
 ];
 
 export const emailTemplates: EmailTemplate[] = [

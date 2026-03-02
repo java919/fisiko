@@ -47,6 +47,17 @@ export type ServiceContent = {
     imageHint?: string;
 };
 
+export type PersonalizedContent = {
+    id: string;
+    assignedClientIds: string[]; 
+    title: string;
+    type: 'exercise' | 'diet' | 'other';
+    content: string;
+    imageUrl?: string;
+    imageHint?: string;
+    createdAt: Date;
+};
+
 export type ChatMessage = {
     id: string;
     senderId: string;
