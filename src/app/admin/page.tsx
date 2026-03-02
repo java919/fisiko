@@ -29,6 +29,10 @@ export default function AdminDashboard() {
     const diffTime = Math.abs(nextBday.getTime() - today.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays <= 30;
+  }).sort((a, b) => {
+      const bdayA = new Date(a.birthday!);
+      const bdayB = new Date(b.birthday!);
+      return bdayA.getMonth() - bdayB.getMonth() || bdayA.getDate() - bdayB.getDate();
   }).slice(0, 3);
 
   return (
