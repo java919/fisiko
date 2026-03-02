@@ -106,7 +106,7 @@ export default function PersonalizedContentPage() {
             toast({ 
                 variant: "destructive", 
                 title: "Error de Asistente IA", 
-                description: "No se pudo generar el contenido. Prueba a ser más específico." 
+                description: error.message || "No se pudo generar el contenido. Prueba a ser más específico." 
             });
         } finally {
             setIsGenerating(false);
@@ -144,14 +144,14 @@ export default function PersonalizedContentPage() {
                                 <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                                     <div className="flex items-center gap-2 text-primary">
                                         <Sparkles className="h-4 w-4" />
-                                        <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO (Sin Censura)</span>
+                                        <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO (Profesional)</span>
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones (ej: Protocolo rehabilitación menisco)</Label>
+                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones técnicas (ej: Dieta hipocalórica para paciente con hipotiroidismo)</Label>
                                         <div className="flex flex-col sm:flex-row gap-2">
                                             <Input 
                                                 id="ai-prompt"
-                                                placeholder="Describe el plan que necesitas..." 
+                                                placeholder="Describe el plan médico o nutricional..." 
                                                 value={aiPrompt}
                                                 onChange={(e) => setAiPrompt(e.target.value)}
                                                 className="bg-background"

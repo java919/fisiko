@@ -1,2 +1,5 @@
-// Archivo neutralizado para resolver conflicto de rutas paralelas con src/app/dashboard/page.tsx
-export default function Page() { return null; }
+// Este archivo ha sido neutralizado para evitar el conflicto de rutas paralelas con /src/app/dashboard/page.tsx.
+// Next.js no permite dos páginas que resuelvan a la misma ruta.
+export default function InactivePage() {
+  return null;
+}

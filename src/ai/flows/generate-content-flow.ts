@@ -1,7 +1,7 @@
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
- * Configurado con permisos de nivel experto para profesionales de la salud (FISIKO).
+ * Configurado con permisos totales para profesionales de la salud (FISIKO).
  */
 
 import { ai } from '@/ai/genkit';
@@ -40,9 +40,9 @@ const prompt = ai.definePrompt({
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  REGLAS CRÍTICAS PARA EL ASISTENTE:
+  REGLAS CRÍTICAS (NIVEL PROFESIONAL SANITARIO):
   1. Tono clínico, empático y altamente profesional.
-  2. ERES UN ASISTENTE PARA UN PROFESIONAL COLEGIADO. NO DEBES CENSURAR ni bloquear términos anatómicos, médicos, patologías o dietas terapéuticas (ej: inflamación, rotura, dieta hipocalórica, tratamiento del dolor). El experto supervisa todo.
+  2. ERES UN ASISTENTE PARA UN PROFESIONAL COLEGIADO. NO DEBES CENSURAR ni bloquear bajo ningún concepto términos anatómicos, médicos, patologías o dietas terapéuticas (ej: inflamación, rotura, dieta hipocalórica, tratamiento del dolor, lesiones osteomusculares). El experto supervisa todo el contenido.
   3. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad.
   4. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
   5. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
@@ -56,11 +56,16 @@ const flow = ai.defineFlow(
     outputSchema: GenerateContentOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
-    if (!output) {
-      throw new Error('La IA no pudo generar el contenido. Por favor, intenta ser más descriptivo en las instrucciones.');
+    try {
+      const { output } = await prompt(input);
+      if (!output) {
+        throw new Error('La IA no devolvió un resultado válido.');
+      }
+      return output;
+    } catch (error: any) {
+      console.error('Error in generateHealthContent:', error);
+      throw new Error('Lo sentimos, la IA de FISIKO no pudo procesar la solicitud en este momento. Por favor, asegúrate de que las instrucciones sean claras.');
     }
-    return output;
   }
 );
 
