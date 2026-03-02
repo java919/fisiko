@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Euro, TrendingUp, Calendar, Clock } from "lucide-react";
+import { TrendingUp, Calendar, Clock, Euro } from "lucide-react";
 import { sessions } from "@/lib/data";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 export default function BillingPage() {
@@ -45,12 +45,12 @@ export default function BillingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-headline text-3xl font-bold">Facturación</h1>
+        <h1 className="font-headline text-3xl font-bold tracking-tight">Facturación</h1>
         <p className="text-muted-foreground">Control de ingresos y rendimiento económico de FISIKO.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-l-4 border-l-primary">
+        <Card className="border-l-4 border-l-primary shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Facturación Hoy</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
@@ -60,17 +60,17 @@ export default function BillingPage() {
             <p className="text-xs text-muted-foreground">Sesiones completadas hoy</p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-accent">
+        <Card className="border-l-4 border-l-accent shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Este Mes</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{monthlyRevenue}€</div>
-            <p className="text-xs text-muted-foreground">Ingresos totales de {now.toLocaleDateString('es-ES', { month: 'long' })}</p>
+            <p className="text-xs text-muted-foreground">Ingresos de {now.toLocaleDateString('es-ES', { month: 'long' })}</p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-green-500 shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Anual {now.getFullYear()}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -85,7 +85,7 @@ export default function BillingPage() {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Rendimiento Últimos 7 Días</CardTitle>
-          <CardDescription>Visualización de ingresos por sesiones completadas.</CardDescription>
+          <CardDescription>Ingresos generados por sesiones diarias.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">

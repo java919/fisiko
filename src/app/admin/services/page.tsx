@@ -41,7 +41,7 @@ export default function AdminServicesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-headline text-3xl font-bold">Servicios y Bonos</h1>
+          <h1 className="font-headline text-3xl font-bold tracking-tight">Servicios y Bonos</h1>
           <p className="text-muted-foreground">Configura los servicios que ofreces y sus precios por sesión.</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -55,6 +55,7 @@ export default function AdminServicesPage() {
             <form onSubmit={handleSave}>
               <DialogHeader>
                 <DialogTitle>{editingService ? 'Editar Servicio' : 'Añadir Nuevo Servicio'}</DialogTitle>
+                <CardDescription>Completa la información para actualizar el catálogo.</CardDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
@@ -79,68 +80,66 @@ export default function AdminServicesPage() {
         </Dialog>
       </div>
 
-      <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline flex items-center gap-2">
-              <Tag className="h-5 w-5 text-primary" />
-              Catálogo Actual
-            </CardTitle>
-            <CardDescription>
-              Estos son los servicios visibles para los clientes y administradores.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Servicio</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead className="text-right">Precio/Sesión</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-headline flex items-center gap-2">
+            <Tag className="h-5 w-5 text-primary" />
+            Catálogo de Servicios
+          </CardTitle>
+          <CardDescription>
+            Estos son los servicios que los clientes pueden contratar y reservar.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Servicio</TableHead>
+                <TableHead>Descripción</TableHead>
+                <TableHead className="text-right">Precio/Sesión</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {services.map((service) => (
+                <TableRow key={service.id}>
+                  <TableCell className="font-bold">{service.name}</TableCell>
+                  <TableCell className="max-w-[300px] text-xs text-muted-foreground italic">
+                    {service.description}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Badge variant="secondary" className="text-sm font-bold">
+                      {service.price}€
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => {
+                          setEditingService(service);
+                          setIsDialogOpen(true);
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => setServices(services.filter(s => s.id !== service.id))}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {services.map((service) => (
-                  <TableRow key={service.id}>
-                    <TableCell className="font-bold">{service.name}</TableCell>
-                    <TableCell className="max-w-[300px] text-xs text-muted-foreground italic">
-                      {service.description}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant="secondary" className="text-sm font-bold">
-                        {service.price}€
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={() => {
-                            setEditingService(service);
-                            setIsDialogOpen(true);
-                          }}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => setServices(services.filter(s => s.id !== service.id))}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
