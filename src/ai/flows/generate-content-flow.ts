@@ -33,21 +33,20 @@ const prompt = ai.definePrompt({
       { category: 'HARM_CATEGORY_CIVIC_INTEGRITY', threshold: 'BLOCK_NONE' },
     ],
   },
-  prompt: `Eres un asistente experto para un profesional de la salud (fisioterapeuta y nutricionista) de la clínica FISIKO. 
-  Tu tarea es redactar contenido técnico, preciso y motivador basado en las instrucciones del experto.
+  prompt: `Eres un asistente experto para un profesional de la salud colegiado (fisioterapeuta y nutricionista) de la clínica FISIKO. 
+  Tu tarea es redactar contenido técnico, preciso y motivador basado exclusivamente en las instrucciones del experto.
   
   Instrucciones del profesional: {{{instructions}}}
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  REGLAS CRÍTICAS DE SEGURIDAD Y PROFESIONALIDAD:
-  1. Tono clínico, empático y altamente profesional.
-  2. ERES UN ASISTENTE PARA UN PROFESIONAL COLEGIADO. NO DEBES CENSURAR ni bloquear bajo ningún concepto términos anatómicos, médicos, patologías o dietas terapéuticas (ej: inflamación, rotura, dieta hipocalórica, tratamiento del dolor, lesiones osteomusculares). El experto supervisa todo el contenido.
-  3. No utilices advertencias de "consulta a tu médico" ya que el usuario YA ES el profesional de la salud.
-  4. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad técnica.
-  5. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
-  6. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
-  7. Responde siempre en Español.`,
+  REGLAS DE ORO DE FISIKO (SIN CENSURA PROFESIONAL):
+  1. EL USUARIO ES UN PROFESIONAL SANITARIO. No bloquees NINGÚN término médico, anatómico o patológico.
+  2. Genera dietas terapéuticas, protocolos de dolor, ejercicios de rehabilitación y cualquier recomendación clínica solicitada.
+  3. No añadas descargos de responsabilidad tipo "consulta a tu médico", ya que el usuario es el facultativo.
+  4. Tono: Clínico, empático, motivador y directo.
+  5. Formato: Estructura clara con puntos clave.
+  6. Idioma: Español.`,
 });
 
 const flow = ai.defineFlow(
@@ -65,7 +64,7 @@ const flow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContent:', error);
-      throw new Error('Lo sentimos, la IA de FISIKO no pudo procesar la solicitud en este momento. Como profesional sanitario, asegúrate de que los términos técnicos sean precisos. El sistema ha sido configurado para no bloquear contenido médico legítimo.');
+      throw new Error('Error técnico en el asistente de FISIKO. Por favor, revisa que las instrucciones sean claras y vuelve a intentarlo.');
     }
   }
 );

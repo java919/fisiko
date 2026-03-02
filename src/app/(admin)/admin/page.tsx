@@ -1,3 +1,8 @@
-// Este archivo ha sido desactivado para eliminar el conflicto de rutas paralelas con /src/app/admin/page.tsx.
-// En Next.js App Router, no puede haber dos archivos page.tsx resolviendo a la misma ruta.
-// Se ha eliminado el contenido para que el compilador ignore esta ruta duplicada.
+/**
+ * ARCHIVO DESACTIVADO
+ * Este archivo ha sido movido a /src/app/admin/page.tsx para evitar conflictos de rutas paralelas en Next.js.
+ */
+export const dynamic = 'force-dynamic';
+export default function InactiveAdminPage() {
+  return null;
+}
