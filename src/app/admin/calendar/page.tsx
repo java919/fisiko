@@ -3,29 +3,160 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlusCircle, Clock, User, CalendarDays } from "lucide-react";
-import { calendarSlots as allSlots, services as allServices, clients } from "@/lib/data";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { PlusCircle, Clock, User, CalendarDays, Save, Sparkles, Loader2 } from "lucide-react";
+import { calendarSlots as initialSlots, services as allServices, clients } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminCalendarPage() {
+  const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [slots, setSlots] = useState(initialSlots);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isConfiguring, setIsConfiguring] = useState(false);
 
-  const slotsForSelectedDay = allSlots.filter(
+  // Form state
+  const [newSlotService, setNewSlotService] = useState(allServices[0].id);
+  const [newSlotTime, setNewSlotTime] = useState("09:00");
+
+  const slotsForSelectedDay = slots.filter(
     slot => date && slot.startTime.toDateString() === date.toDateString()
   ).sort((a,b) => a.startTime.getTime() - b.startTime.getTime());
+
+  const handleCreateSlot = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!date) return;
+
+    const [hours, minutes] = newSlotTime.split(":").map(Number);
+    const startTime = new Date(date);
+    startTime.setHours(hours, minutes, 0, 0);
+    
+    const endTime = new Date(startTime);
+    endTime.setHours(startTime.getHours() + 1);
+
+    const newSlot = {
+      id: `slot-${Date.now()}`,
+      startTime,
+      endTime,
+      serviceId: newSlotService,
+      isBooked: false
+    };
+
+    setSlots([...slots, newSlot]);
+    setIsDialogOpen(false);
+    toast({
+      title: "Hueco creado",
+      description: `Sesión programada para las ${newSlotTime} correctamente.`
+    });
+  };
+
+  const handleQuickSetup = () => {
+    if (!date) return;
+    setIsConfiguring(true);
+
+    // Simular una pequeña carga para feedback visual
+    setTimeout(() => {
+      const morningHours = ["09:00", "10:00", "11:00", "12:00", "13:00"];
+      const newQuickSlots = morningHours.map((time, index) => {
+        const [h, m] = time.split(":").map(Number);
+        const start = new Date(date);
+        start.setHours(h, m, 0, 0);
+        const end = new Date(start);
+        end.setHours(start.getHours() + 1);
+
+        return {
+          id: `quick-${date.getTime()}-${index}`,
+          startTime: start,
+          endTime: end,
+          serviceId: allServices[0].id, // Default to first service
+          isBooked: false
+        };
+      });
+
+      // Evitar duplicados exactos si ya existen
+      const filteredNewSlots = newQuickSlots.filter(newSlot => 
+        !slots.some(existing => existing.startTime.getTime() === newSlot.startTime.getTime())
+      );
+
+      if (filteredNewSlots.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Horario ya configurado",
+          description: "Ya existen huecos para las horas de la mañana en esta fecha."
+        });
+      } else {
+        setSlots([...slots, ...filteredNewSlots]);
+        toast({
+          title: "Horario configurado",
+          description: `Se han añadido ${filteredNewSlots.length} huecos para la jornada de mañana.`
+        });
+      }
+      setIsConfiguring(false);
+    }, 600);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">Agenda y Citas</h1>
+          <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight text-primary">Agenda y Citas</h1>
           <p className="text-sm text-muted-foreground">Control de disponibilidad y reservas del centro.</p>
         </div>
-        <Button size="lg" className="font-bold shadow-md w-full sm:w-auto">
-          <PlusCircle className="mr-2 h-5 w-5" />
-          Nuevo Hueco
-        </Button>
+        
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size="lg" className="font-bold shadow-md w-full sm:w-auto">
+              <PlusCircle className="mr-2 h-5 w-5" />
+              Nuevo Hueco
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <form onSubmit={handleCreateSlot}>
+              <DialogHeader>
+                <DialogTitle>Programar Nuevo Hueco</DialogTitle>
+                <DialogDescription>
+                  Añade disponibilidad manual al calendario para el {date?.toLocaleDateString('es-ES')}.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="service">Servicio</Label>
+                  <Select value={newSlotService} onValueChange={setNewSlotService}>
+                    <SelectTrigger id="service">
+                      <SelectValue placeholder="Selecciona servicio" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {allServices.map(s => (
+                        <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="time">Hora de Inicio</Label>
+                  <Input 
+                    id="time" 
+                    type="time" 
+                    value={newSlotTime} 
+                    onChange={(e) => setNewSlotTime(e.target.value)} 
+                    required 
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" className="w-full">
+                  <Save className="mr-2 h-4 w-4" />
+                  Guardar Disponibilidad
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -90,9 +221,18 @@ export default function AdminCalendarPage() {
                 })
               ) : (
                 <div className="text-center py-16 bg-muted/10 rounded-xl border-2 border-dashed px-4">
-                  <Clock className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <Sparkles className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
                   <p className="text-muted-foreground font-medium italic">No hay huecos configurados.</p>
-                  <Button variant="outline" size="sm" className="mt-4">Configurar horario rápido</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-4 border-primary/30 hover:bg-primary/5"
+                    onClick={handleQuickSetup}
+                    disabled={isConfiguring}
+                  >
+                    {isConfiguring ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Clock className="mr-2 h-4 w-4" />}
+                    Configurar horario rápido (Mañana)
+                  </Button>
                 </div>
               )}
             </div>
