@@ -1,1 +1,1 @@
-// Inert file to prevent parallel route conflicts.
+// Archivo neutralizado para evitar conflictos de rutas paralelas con /src/app/admin/page.tsx
