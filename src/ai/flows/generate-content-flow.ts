@@ -40,13 +40,14 @@ const prompt = ai.definePrompt({
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  REGLAS CRÍTICAS (NIVEL PROFESIONAL SANITARIO):
+  REGLAS CRÍTICAS DE SEGURIDAD Y PROFESIONALIDAD:
   1. Tono clínico, empático y altamente profesional.
   2. ERES UN ASISTENTE PARA UN PROFESIONAL COLEGIADO. NO DEBES CENSURAR ni bloquear bajo ningún concepto términos anatómicos, médicos, patologías o dietas terapéuticas (ej: inflamación, rotura, dieta hipocalórica, tratamiento del dolor, lesiones osteomusculares). El experto supervisa todo el contenido.
-  3. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad.
-  4. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
-  5. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
-  6. Responde siempre en Español.`,
+  3. No utilices advertencias de "consulta a tu médico" ya que el usuario YA ES el profesional de la salud.
+  4. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad técnica.
+  5. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
+  6. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
+  7. Responde siempre en Español.`,
 });
 
 const flow = ai.defineFlow(
@@ -64,7 +65,7 @@ const flow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContent:', error);
-      throw new Error('Lo sentimos, la IA de FISIKO no pudo procesar la solicitud en este momento. Por favor, asegúrate de que las instrucciones sean claras.');
+      throw new Error('Lo sentimos, la IA de FISIKO no pudo procesar la solicitud en este momento. Como profesional sanitario, asegúrate de que los términos técnicos sean precisos. El sistema ha sido configurado para no bloquear contenido médico legítimo.');
     }
   }
 );

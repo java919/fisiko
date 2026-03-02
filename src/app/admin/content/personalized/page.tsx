@@ -99,14 +99,14 @@ export default function PersonalizedContentPage() {
             if (result) {
                 setFormTitle(result.title);
                 setFormContent(result.content);
-                toast({ title: "Plan generado por IA", description: "Se ha creado una propuesta técnica basada en tu instrucción." });
+                toast({ title: "Plan generado por IA", description: "Se ha creado una propuesta técnica basada en tu instrucción profesional." });
             }
         } catch (error: any) {
             console.error("Error generating content:", error);
             toast({ 
                 variant: "destructive", 
                 title: "Error de Asistente IA", 
-                description: error.message || "No se pudo generar el contenido. Prueba a ser más específico." 
+                description: error.message || "No se pudo generar el contenido. Como profesional, el sistema está configurado para no bloquear términos técnicos." 
             });
         } finally {
             setIsGenerating(false);
@@ -133,11 +133,11 @@ export default function PersonalizedContentPage() {
                             <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl max-h-[95vh] overflow-y-auto w-[95vw] rounded-xl p-4 sm:p-6">
+                    <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto w-[95vw] rounded-xl p-4 sm:p-6">
                         <form onSubmit={handleSave}>
                             <DialogHeader>
                                 <DialogTitle>{editingContent ? 'Editar Plan Personalizado' : 'Crear Contenido Personalizado'}</DialogTitle>
-                                <DialogDescription>Usa el Asistente IA FISIKO para redactar planes técnicos rápidamente.</DialogDescription>
+                                <DialogDescription>Usa el Asistente IA FISIKO para redactar planes técnicos rápidamente sin restricciones.</DialogDescription>
                             </DialogHeader>
                             
                             <div className="grid gap-6 py-4">
@@ -186,7 +186,7 @@ export default function PersonalizedContentPage() {
 
                                 <div className="space-y-3">
                                     <Label>Asignar a Clientes</Label>
-                                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2 max-h-[150px] overflow-y-auto p-3 border rounded-md bg-muted/5">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[150px] overflow-y-auto p-3 border rounded-md bg-muted/5">
                                         {clients.map(client => (
                                             <div key={client.id} className="flex items-center space-x-2 p-1.5 hover:bg-muted/50 rounded transition-colors">
                                                 <Checkbox id={`c-${client.id}`} checked={selectedClients.includes(client.id)} onCheckedChange={() => toggleClient(client.id)} />

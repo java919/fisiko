@@ -1,5 +1,3 @@
-// Este archivo ha sido neutralizado para evitar el conflicto de rutas paralelas con /src/app/admin/page.tsx.
-// Next.js no permite dos páginas que resuelvan a la misma ruta.
-export default function InactivePage() {
-  return null;
-}
+// Este archivo ha sido desactivado para eliminar el conflicto de rutas paralelas con /src/app/admin/page.tsx.
+// En Next.js App Router, no puede haber dos archivos page.tsx resolviendo a la misma ruta.
+// Se ha eliminado el contenido para que el compilador ignore esta ruta duplicada.

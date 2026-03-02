@@ -66,7 +66,7 @@ export default function ServiceContentPage() {
         setEditingContent(content);
         setFormTitle(content.title);
         setFormContent(content.content);
-        setFormType(content.type);
+        setFormType(content.type as any);
         setSelectedServiceId(content.serviceId);
         setIsDialogOpen(true);
     };
@@ -97,7 +97,7 @@ export default function ServiceContentPage() {
             }
         } catch (error) {
             console.error(error);
-            toast({ variant: "destructive", title: "Error de IA", description: "No se pudo procesar la solicitud." });
+            toast({ variant: "destructive", title: "Error de IA", description: "No se pudo procesar la solicitud médica." });
         } finally {
             setIsGenerating(false);
         }
@@ -140,11 +140,11 @@ export default function ServiceContentPage() {
                                     <DialogTrigger asChild>
                                         <Button onClick={resetForm} className="w-full sm:w-auto"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Contenido</Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-2xl w-[95vw] rounded-xl max-h-[95vh] overflow-y-auto">
+                                    <DialogContent className="max-w-2xl w-[95vw] rounded-xl max-h-[90vh] overflow-y-auto">
                                         <form onSubmit={handleSave}>
                                             <DialogHeader>
                                                 <DialogTitle>{editingContent ? 'Editar Contenido de Biblioteca' : `Nuevo para ${service.name}`}</DialogTitle>
-                                                <DialogDescription>Crea guías educativas apoyándote en la IA de FISIKO (Sin Censura).</DialogDescription>
+                                                <DialogDescription>Crea guías educativas apoyándote en la IA de FISIKO sin restricciones de seguridad profesional.</DialogDescription>
                                             </DialogHeader>
                                             
                                             <div className="grid gap-6 py-4">
