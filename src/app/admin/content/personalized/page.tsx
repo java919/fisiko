@@ -106,7 +106,7 @@ export default function PersonalizedContentPage() {
             toast({ 
                 variant: "destructive", 
                 title: "Error de Asistente IA", 
-                description: "No se pudo generar el contenido. La IA de FISIKO está bajo mantenimiento o el prompt es demasiado ambiguo." 
+                description: "No se pudo generar el contenido. Prueba a ser más específico o profesional en tu instrucción." 
             });
         } finally {
             setIsGenerating(false);
@@ -129,7 +129,7 @@ export default function PersonalizedContentPage() {
                     if (!open) resetForm();
                 }}>
                     <DialogTrigger asChild>
-                        <Button onClick={resetForm} className="font-bold w-full sm:w-auto">
+                        <Button onClick={resetForm} className="font-bold w-full sm:w-auto shadow-md">
                             <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo
                         </Button>
                     </DialogTrigger>
@@ -147,15 +147,16 @@ export default function PersonalizedContentPage() {
                                         <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO</span>
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones para la IA (ej: Rutina de estiramientos para cervicales)</Label>
+                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones para la IA (ej: Dieta antiinflamatoria para rodilla)</Label>
                                         <div className="flex flex-col sm:flex-row gap-2">
                                             <Input 
                                                 id="ai-prompt"
                                                 placeholder="Describe el plan que necesitas..." 
                                                 value={aiPrompt}
                                                 onChange={(e) => setAiPrompt(e.target.value)}
+                                                className="bg-background"
                                             />
-                                            <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt}>
+                                            <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt} className="shrink-0">
                                                 {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
                                                 Generar
                                             </Button>
@@ -196,7 +197,7 @@ export default function PersonalizedContentPage() {
                                 </div>
                             </div>
 
-                            <DialogFooter className="gap-2 sm:gap-0">
+                            <DialogFooter className="gap-2 sm:gap-0 border-t pt-4">
                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
                                 <Button type="submit" disabled={selectedClients.length === 0}>
                                     {editingContent ? 'Guardar Cambios' : 'Publicar Plan'}
@@ -209,7 +210,7 @@ export default function PersonalizedContentPage() {
 
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {persContent.map(content => (
-                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all shadow-sm group">
+                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all shadow-sm group bg-card">
                         <CardHeader className="flex flex-row items-start justify-between p-4 pb-2">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">

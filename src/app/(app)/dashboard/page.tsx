@@ -1,7 +1,2 @@
-/**
- * ARCHIVO DESACTIVADO
- * Este archivo se ha neutralizado para evitar conflictos de rutas paralelas con /src/app/dashboard/page.tsx.
- * FISIKO utiliza rutas directas para mayor estabilidad.
- */
-const ParallelRouteConflictResolution = () => null;
-export { ParallelRouteConflictResolution };
+// Archivo neutralizado para resolver el conflicto de páginas paralelas con /src/app/dashboard/page.tsx
+export default function Page() { return null; }
