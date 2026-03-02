@@ -105,7 +105,7 @@ export default function ServiceContentPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-1">
-                <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">Biblioteca por Servicio</h1>
+                <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight text-primary">Biblioteca por Servicio</h1>
                 <p className="text-sm text-muted-foreground">Gestiona recursos visibles para todos los suscritos a cada servicio.</p>
             </div>
 
@@ -176,7 +176,7 @@ export default function ServiceContentPage() {
                                                 </div>
                                             </div>
 
-                                            <DialogFooter className="gap-2 sm:gap-0">
+                                            <DialogFooter className="gap-2 sm:gap-0 border-t pt-4">
                                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
                                                 <Button type="submit">
                                                     {editingContent ? 'Guardar Cambios' : 'Publicar en Biblioteca'}
@@ -207,7 +207,7 @@ export default function ServiceContentPage() {
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => handleEdit(content)}>Editar</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => handleEdit(content)}>Editar</DropdownMenuItem>
                                                 <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>Eliminar</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

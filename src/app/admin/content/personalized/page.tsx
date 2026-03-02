@@ -226,7 +226,7 @@ export default function PersonalizedContentPage() {
                                     <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => handleEdit(content)}>Editar Plan</DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={() => handleEdit(content)}>Editar Plan</DropdownMenuItem>
                                     <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>Eliminar</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

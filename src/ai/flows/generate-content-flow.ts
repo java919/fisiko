@@ -57,7 +57,7 @@ const prompt = ai.definePrompt({
   
   Reglas de generación CRÍTICAS:
   1. Tono clínico, empático y altamente profesional.
-  2. NO censures términos anatómicos, médicos o de patologías (ej: inflamación, menisco, lesión, dieta hipocalórica). Este contenido es supervisado por un experto.
+  2. NO censures términos anatómicos, médicos o de patologías (ej: inflamación, menisco, lesión, dieta hipocalórica, tratamiento de dolor). Este contenido es supervisado por un experto colegiado.
   3. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad.
   4. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
   5. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
