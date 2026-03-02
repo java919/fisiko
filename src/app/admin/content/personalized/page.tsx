@@ -20,6 +20,7 @@ export default function PersonalizedContentPage() {
     const { toast } = useToast();
     const [persContent, setPersContent] = useState(initialPersonalized);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [editingContent, setEditingContent] = useState<any>(null);
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     
@@ -30,16 +31,27 @@ export default function PersonalizedContentPage() {
 
     const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const newContent = {
-            id: `p-${Date.now()}`,
-            title: formTitle,
-            type: formType,
-            content: formContent,
-            assignedClientIds: selectedClients,
-            createdAt: new Date(),
-        };
-        setPersContent([newContent, ...persContent]);
-        toast({ title: "Plan Personalizado Creado", description: `Asignado a ${selectedClients.length} clientes.` });
+        
+        if (editingContent) {
+            setPersContent(persContent.map(c => 
+                c.id === editingContent.id 
+                ? { ...c, title: formTitle, content: formContent, type: formType, assignedClientIds: selectedClients } 
+                : c
+            ));
+            toast({ title: "Plan Actualizado", description: "Los cambios se han guardado correctamente." });
+        } else {
+            const newContent = {
+                id: `p-${Date.now()}`,
+                title: formTitle,
+                type: formType,
+                content: formContent,
+                assignedClientIds: selectedClients,
+                createdAt: new Date(),
+            };
+            setPersContent([newContent, ...persContent]);
+            toast({ title: "Plan Personalizado Creado", description: `Asignado a ${selectedClients.length} clientes.` });
+        }
+        
         setIsDialogOpen(false);
         resetForm();
     };
@@ -50,6 +62,21 @@ export default function PersonalizedContentPage() {
         setFormType("exercise");
         setAiPrompt("");
         setSelectedClients([]);
+        setEditingContent(null);
+    };
+
+    const handleEdit = (content: any) => {
+        setEditingContent(content);
+        setFormTitle(content.title);
+        setFormContent(content.content);
+        setFormType(content.type);
+        setSelectedClients(content.assignedClientIds);
+        setIsDialogOpen(true);
+    };
+
+    const handleDelete = (id: string) => {
+        setPersContent(persContent.filter(c => c.id !== id));
+        toast({ variant: "destructive", title: "Plan Eliminado", description: "El contenido ha sido borrado." });
     };
 
     const handleGenerateAI = async () => {
@@ -87,14 +114,17 @@ export default function PersonalizedContentPage() {
                     <h1 className="font-headline text-3xl font-bold">Planes Personalizados</h1>
                     <p className="text-muted-foreground">Crea y asigna dietas o rutinas exclusivas para clientes específicos.</p>
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                    setIsDialogOpen(open);
+                    if (!open) resetForm();
+                }}>
                     <DialogTrigger asChild>
                         <Button onClick={resetForm} className="font-bold"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo</Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                         <form onSubmit={handleSave}>
                             <DialogHeader>
-                                <DialogTitle>Crear Contenido Personalizado</DialogTitle>
+                                <DialogTitle>{editingContent ? 'Editar Plan' : 'Crear Contenido Personalizado'}</DialogTitle>
                                 <DialogDescription>Define el plan manualmente o deja que la IA de FISIKO te ayude.</DialogDescription>
                             </DialogHeader>
                             
@@ -124,7 +154,7 @@ export default function PersonalizedContentPage() {
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="type">Tipo</Label>
-                                        <select value={formType} onChange={(e) => setFormType(e.target.value as any)} className="w-full h-10 rounded-md border bg-background px-3 text-sm">
+                                        <select value={formType} onChange={(e) => setFormType(e.target.value as any)} className="w-full h-10 rounded-md border bg-background px-3 text-sm focus:ring-2 focus:ring-primary outline-none">
                                             <option value="exercise">Ejercicio</option>
                                             <option value="diet">Dieta</option>
                                             <option value="other">Otro</option>
@@ -139,11 +169,11 @@ export default function PersonalizedContentPage() {
 
                                 <div className="space-y-3">
                                     <Label>Asignar a Clientes</Label>
-                                    <div className="grid grid-cols-2 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md bg-muted/5">
                                         {clients.map(client => (
-                                            <div key={client.id} className="flex items-center space-x-2">
+                                            <div key={client.id} className="flex items-center space-x-2 p-1 hover:bg-muted/50 rounded transition-colors">
                                                 <Checkbox id={`c-${client.id}`} checked={selectedClients.includes(client.id)} onCheckedChange={() => toggleClient(client.id)} />
-                                                <Label htmlFor={`c-${client.id}`} className="text-xs cursor-pointer">{client.name}</Label>
+                                                <Label htmlFor={`c-${client.id}`} className="text-xs cursor-pointer truncate">{client.name}</Label>
                                             </div>
                                         ))}
                                     </div>
@@ -152,7 +182,9 @@ export default function PersonalizedContentPage() {
 
                             <DialogFooter>
                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
-                                <Button type="submit" disabled={selectedClients.length === 0}>Publicar Plan</Button>
+                                <Button type="submit" disabled={selectedClients.length === 0}>
+                                    {editingContent ? 'Guardar Cambios' : 'Publicar Plan'}
+                                </Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -161,32 +193,32 @@ export default function PersonalizedContentPage() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {persContent.map(content => (
-                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all">
-                        <CardHeader className="flex flex-row items-start justify-between">
+                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all shadow-sm">
+                        <CardHeader className="flex flex-row items-start justify-between p-4 pb-2">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-primary/10 rounded-lg text-primary">
                                     {content.type === 'diet' ? <Apple className="h-5 w-5" /> : content.type === 'exercise' ? <Dumbbell className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
                                 </div>
-                                <div>
-                                    <CardTitle className="text-lg">{content.title}</CardTitle>
+                                <div className="min-w-0">
+                                    <CardTitle className="text-lg truncate">{content.title}</CardTitle>
                                     <CardDescription>{new Date(content.createdAt).toLocaleDateString('es-ES')}</CardDescription>
                                 </div>
                             </div>
                             <DropdownMenu>
-                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>Editar</DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleEdit(content)}>Editar</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>Eliminar</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <p className="text-sm text-muted-foreground line-clamp-3">{content.content}</p>
+                        <CardContent className="p-4 pt-2 space-y-4">
+                            <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">{content.content}</p>
                             <div className="flex flex-wrap gap-1">
                                 {content.assignedClientIds.map(cid => {
                                     const client = clients.find(c => c.id === cid);
                                     return (
-                                        <Badge key={cid} variant="secondary" className="text-[9px] px-1 py-0 h-4">
+                                        <Badge key={cid} variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-muted/50">
                                             <User className="h-2 w-2 mr-1" />
                                             {client?.name}
                                         </Badge>
