@@ -86,24 +86,27 @@ export default function PersonalizedContentPage() {
 
         setIsGenerating(true);
         try {
-            const firstClient = selectedClients.length > 0 ? clients.find(c => c.id === selectedClients[0])?.name : undefined;
+            const firstClientName = selectedClients.length > 0 
+                ? clients.find(c => c.id === selectedClients[0])?.name 
+                : undefined;
+            
             const result = await generateHealthContent({
                 instructions: aiPrompt,
                 type: formType,
-                clientName: firstClient
+                clientName: firstClientName
             });
             
             if (result) {
                 setFormTitle(result.title);
                 setFormContent(result.content);
-                toast({ title: "Plan generado", description: "La IA ha creado una propuesta personalizada." });
+                toast({ title: "Plan generado por IA", description: "Se ha creado una propuesta técnica basada en tu prompt." });
             }
         } catch (error: any) {
             console.error("Error generating content:", error);
             toast({ 
                 variant: "destructive", 
-                title: "Error de IA", 
-                description: "La IA no pudo procesar la solicitud. Prueba a ser más específico o evita términos médicos complejos." 
+                title: "Error de Asistente IA", 
+                description: "No se pudo generar el contenido. La IA de FISIKO está bajo mantenimiento o el prompt es demasiado ambiguo." 
             });
         } finally {
             setIsGenerating(false);
@@ -116,23 +119,25 @@ export default function PersonalizedContentPage() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="font-headline text-3xl font-bold">Planes Personalizados</h1>
-                    <p className="text-muted-foreground">Crea y asigna dietas o rutinas exclusivas para clientes específicos.</p>
+                    <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">Planes Personalizados</h1>
+                    <p className="text-sm text-muted-foreground">Crea y asigna dietas o rutinas exclusivas para clientes específicos.</p>
                 </div>
                 <Dialog open={isDialogOpen} onOpenChange={(open) => {
                     setIsDialogOpen(open);
                     if (!open) resetForm();
                 }}>
                     <DialogTrigger asChild>
-                        <Button onClick={resetForm} className="font-bold"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo</Button>
+                        <Button onClick={resetForm} className="font-bold w-full sm:w-auto">
+                            <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Plan Exclusivo
+                        </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto w-[95vw] rounded-xl">
                         <form onSubmit={handleSave}>
                             <DialogHeader>
                                 <DialogTitle>{editingContent ? 'Editar Plan' : 'Crear Contenido Personalizado'}</DialogTitle>
-                                <DialogDescription>Define el plan manualmente o deja que la IA de FISIKO te ayude.</DialogDescription>
+                                <DialogDescription>Usa el Asistente IA FISIKO para redactar planes técnicos rápidamente.</DialogDescription>
                             </DialogHeader>
                             
                             <div className="grid gap-6 py-4">
@@ -142,11 +147,11 @@ export default function PersonalizedContentPage() {
                                         <span className="text-sm font-bold uppercase tracking-wider">Asistente IA FISIKO</span>
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Escribe qué necesitas generar (ej: Dieta hipocalórica para Luis)</Label>
-                                        <div className="flex gap-2">
+                                        <Label htmlFor="ai-prompt" className="text-xs text-muted-foreground">Instrucciones para la IA (ej: Rutina de estiramientos para cervicales)</Label>
+                                        <div className="flex flex-col sm:flex-row gap-2">
                                             <Input 
                                                 id="ai-prompt"
-                                                placeholder="Ej: Rutina de estiramientos para Juan, operado de menisco..." 
+                                                placeholder="Describe el plan que necesitas..." 
                                                 value={aiPrompt}
                                                 onChange={(e) => setAiPrompt(e.target.value)}
                                             />
@@ -161,28 +166,28 @@ export default function PersonalizedContentPage() {
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="title">Título del Plan</Label>
-                                        <Input id="title" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="Ej: Dieta Keto para Juan" required />
+                                        <Input id="title" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="Ej: Protocolo Readaptación LCA" required />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="type">Tipo</Label>
+                                        <Label htmlFor="type">Tipo de Contenido</Label>
                                         <select value={formType} onChange={(e) => setFormType(e.target.value as any)} className="w-full h-10 rounded-md border bg-background px-3 text-sm focus:ring-2 focus:ring-primary outline-none">
-                                            <option value="exercise">Ejercicio</option>
-                                            <option value="diet">Dieta</option>
-                                            <option value="other">Otro</option>
+                                            <option value="exercise">Ejercicio / Rutina</option>
+                                            <option value="diet">Dieta / Nutrición</option>
+                                            <option value="other">Otros consejos</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="content">Descripción Técnica</Label>
-                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[150px]" required />
+                                    <Label htmlFor="content">Contenido Técnico</Label>
+                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[180px]" placeholder="Detalla los ejercicios o la dieta aquí..." required />
                                 </div>
 
                                 <div className="space-y-3">
                                     <Label>Asignar a Clientes</Label>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md bg-muted/5">
+                                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2 max-h-[120px] overflow-y-auto p-2 border rounded-md bg-muted/5">
                                         {clients.map(client => (
-                                            <div key={client.id} className="flex items-center space-x-2 p-1 hover:bg-muted/50 rounded transition-colors">
+                                            <div key={client.id} className="flex items-center space-x-2 p-1.5 hover:bg-muted/50 rounded transition-colors">
                                                 <Checkbox id={`c-${client.id}`} checked={selectedClients.includes(client.id)} onCheckedChange={() => toggleClient(client.id)} />
                                                 <Label htmlFor={`c-${client.id}`} className="text-xs cursor-pointer truncate">{client.name}</Label>
                                             </div>
@@ -191,7 +196,7 @@ export default function PersonalizedContentPage() {
                                 </div>
                             </div>
 
-                            <DialogFooter>
+                            <DialogFooter className="gap-2 sm:gap-0">
                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
                                 <Button type="submit" disabled={selectedClients.length === 0}>
                                     {editingContent ? 'Guardar Cambios' : 'Publicar Plan'}
@@ -202,23 +207,25 @@ export default function PersonalizedContentPage() {
                 </Dialog>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {persContent.map(content => (
-                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all shadow-sm">
+                    <Card key={content.id} className="border-2 hover:border-primary/20 transition-all shadow-sm group">
                         <CardHeader className="flex flex-row items-start justify-between p-4 pb-2">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                                <div className="p-2 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     {content.type === 'diet' ? <Apple className="h-5 w-5" /> : content.type === 'exercise' ? <Dumbbell className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
                                 </div>
                                 <div className="min-w-0">
-                                    <CardTitle className="text-lg truncate">{content.title}</CardTitle>
-                                    <CardDescription>{new Date(content.createdAt).toLocaleDateString('es-ES')}</CardDescription>
+                                    <CardTitle className="text-lg truncate font-headline">{content.title}</CardTitle>
+                                    <CardDescription className="text-xs">{new Date(content.createdAt).toLocaleDateString('es-ES')}</CardDescription>
                                 </div>
                             </div>
                             <DropdownMenu>
-                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
+                                </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => handleEdit(content)}>Editar</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleEdit(content)}>Editar Plan</DropdownMenuItem>
                                     <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(content.id)}>Eliminar</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -229,8 +236,8 @@ export default function PersonalizedContentPage() {
                                 {content.assignedClientIds.map(cid => {
                                     const client = clients.find(c => c.id === cid);
                                     return (
-                                        <Badge key={cid} variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-muted/50">
-                                            <User className="h-2 w-2 mr-1" />
+                                        <Badge key={cid} variant="secondary" className="text-[9px] px-2 py-0 h-5 bg-muted/50 border-none">
+                                            <User className="h-2.5 w-2.5 mr-1" />
                                             {client?.name}
                                         </Badge>
                                     )
@@ -240,9 +247,10 @@ export default function PersonalizedContentPage() {
                     </Card>
                 ))}
                 {persContent.length === 0 && (
-                    <div className="col-span-full text-center py-20 border-2 border-dashed rounded-xl bg-muted/5">
-                        <Sparkles className="h-10 w-10 text-muted-foreground/20 mx-auto mb-2" />
-                        <p className="text-muted-foreground">Aún no has creado planes personalizados.</p>
+                    <div className="col-span-full text-center py-24 border-2 border-dashed rounded-2xl bg-muted/5">
+                        <Sparkles className="h-12 w-12 text-muted-foreground/20 mx-auto mb-3" />
+                        <p className="text-muted-foreground font-medium">No has creado planes exclusivos todavía.</p>
+                        <p className="text-xs text-muted-foreground mt-1">Utiliza la IA para generar tu primer plan profesional.</p>
                     </div>
                 )}
             </div>

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react";
@@ -38,7 +37,7 @@ export default function ServiceContentPage() {
                 ? { ...c, title: formTitle, content: formContent, type: formType } 
                 : c
             ));
-            toast({ title: "Contenido Actualizado", description: "Los cambios se han guardado en la biblioteca." });
+            toast({ title: "Contenido Actualizado", description: "Los cambios se han guardado en la biblioteca del servicio." });
         } else {
             const newContent = {
                 id: `c-${Date.now()}`,
@@ -48,7 +47,7 @@ export default function ServiceContentPage() {
                 content: formContent,
             };
             setContentList([newContent, ...contentList]);
-            toast({ title: "Contenido Añadido", description: "Se ha publicado en la biblioteca del servicio." });
+            toast({ title: "Contenido Publicado", description: "Se ha añadido a la biblioteca general del servicio." });
         }
         
         setIsDialogOpen(false);
@@ -73,12 +72,12 @@ export default function ServiceContentPage() {
 
     const handleDelete = (id: string) => {
         setContentList(contentList.filter(c => c.id !== id));
-        toast({ variant: "destructive", title: "Contenido Borrado", description: "Se ha eliminado de la biblioteca." });
+        toast({ variant: "destructive", title: "Contenido Eliminado", description: "Se ha retirado de la biblioteca." });
     };
 
     const handleGenerateAI = async () => {
         if (!aiPrompt) {
-            toast({ variant: "destructive", title: "Instrucciones vacías", description: "Escribe qué quieres generar para este servicio." });
+            toast({ variant: "destructive", title: "Instrucciones vacías", description: "Dinos sobre qué quieres generar contenido." });
             return;
         }
 
@@ -86,15 +85,18 @@ export default function ServiceContentPage() {
         try {
             const serviceName = services.find(s => s.id === selectedServiceId)?.name;
             const result = await generateHealthContent({
-                instructions: `Genera contenido educativo para el servicio de ${serviceName}: ${aiPrompt}`,
+                instructions: `Genera una guía técnica para el servicio de ${serviceName}: ${aiPrompt}`,
                 type: 'exercise',
             });
 
-            setFormTitle(result.title);
-            setFormContent(result.content);
-            toast({ title: "¡IA ha respondido!", description: "Contenido generado para el servicio." });
+            if (result) {
+                setFormTitle(result.title);
+                setFormContent(result.content);
+                toast({ title: "IA FISIKO ha respondido", description: "Contenido educativo generado para el servicio." });
+            }
         } catch (error) {
-            toast({ variant: "destructive", title: "Error de IA", description: "No se pudo generar el contenido." });
+            console.error(error);
+            toast({ variant: "destructive", title: "Error de IA", description: "No se pudo procesar la solicitud. Sé más específico." });
         } finally {
             setIsGenerating(false);
         }
@@ -102,45 +104,46 @@ export default function ServiceContentPage() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-headline text-3xl font-bold">Biblioteca de Servicios</h1>
-                    <p className="text-muted-foreground">Gestiona el contenido exclusivo que ven todos los clientes suscritos a cada servicio.</p>
-                </div>
+            <div className="flex flex-col gap-1">
+                <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">Biblioteca por Servicio</h1>
+                <p className="text-sm text-muted-foreground">Gestiona recursos visibles para todos los suscritos a cada servicio.</p>
             </div>
 
             <Tabs defaultValue={services[0].id} onValueChange={setSelectedServiceId} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 h-auto bg-transparent gap-2 p-0">
-                    {services.map(service => (
-                        <TabsTrigger 
-                            key={service.id} 
-                            value={service.id}
-                            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border shadow-sm"
-                        >
-                            {service.name}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+                <div className="overflow-x-auto pb-2">
+                    <TabsList className="inline-flex w-auto min-w-full md:min-w-0 bg-transparent gap-2 p-0 h-auto">
+                        {services.map(service => (
+                            <TabsTrigger 
+                                key={service.id} 
+                                value={service.id}
+                                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border shadow-sm px-6 py-2 rounded-full transition-all"
+                            >
+                                {service.name}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                </div>
+
                 {services.map(service => (
                     <TabsContent key={service.id} value={service.id} className="mt-6">
-                        <Card className="border-2">
-                            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-muted/20 gap-4">
+                        <Card className="border-2 shadow-sm overflow-hidden">
+                            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-muted/10 gap-4 border-b">
                                 <div>
-                                    <CardTitle className="text-xl">Recursos de {service.name}</CardTitle>
-                                    <CardDescription>Visible para cualquier cliente con un bono de {service.name} activo.</CardDescription>
+                                    <CardTitle className="text-xl font-headline">Recursos de {service.name}</CardTitle>
+                                    <CardDescription>Visible para cualquier cliente con bono de {service.name}.</CardDescription>
                                 </div>
                                 <Dialog open={isDialogOpen} onOpenChange={(open) => {
                                     setIsDialogOpen(open);
                                     if (!open) resetForm();
                                 }}>
                                     <DialogTrigger asChild>
-                                        <Button onClick={resetForm}><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Contenido</Button>
+                                        <Button onClick={resetForm} className="w-full sm:w-auto"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Contenido</Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-2xl">
+                                    <DialogContent className="max-w-2xl w-[95vw] rounded-xl">
                                         <form onSubmit={handleSave}>
                                             <DialogHeader>
-                                                <DialogTitle>{editingContent ? 'Editar Contenido' : `Añadir a la Biblioteca de ${service.name}`}</DialogTitle>
-                                                <DialogDescription>Utiliza la IA para redactar guías de ejercicios o consejos de salud.</DialogDescription>
+                                                <DialogTitle>{editingContent ? 'Editar Contenido' : `Nuevo para ${service.name}`}</DialogTitle>
+                                                <DialogDescription>Crea guías educativas apoyándote en la IA de FISIKO.</DialogDescription>
                                             </DialogHeader>
                                             
                                             <div className="grid gap-6 py-4">
@@ -149,7 +152,7 @@ export default function ServiceContentPage() {
                                                         <Sparkles className="h-4 w-4" />
                                                         <span className="text-sm font-bold uppercase">Asistente IA FISIKO</span>
                                                     </div>
-                                                    <div className="flex gap-2">
+                                                    <div className="flex flex-col sm:flex-row gap-2">
                                                         <Input 
                                                             placeholder="Ej: Recomendaciones post-fisioterapia para hombro..." 
                                                             value={aiPrompt}
@@ -163,17 +166,17 @@ export default function ServiceContentPage() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="title">Título</Label>
+                                                    <Label htmlFor="title">Título del Recurso</Label>
                                                     <Input id="title" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} required />
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="content">Contenido</Label>
-                                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[150px]" required />
+                                                    <Label htmlFor="content">Descripción / Guía Paso a Paso</Label>
+                                                    <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[180px]" required />
                                                 </div>
                                             </div>
 
-                                            <DialogFooter>
+                                            <DialogFooter className="gap-2 sm:gap-0">
                                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
                                                 <Button type="submit">
                                                     {editingContent ? 'Guardar Cambios' : 'Publicar en Biblioteca'}
@@ -185,19 +188,19 @@ export default function ServiceContentPage() {
                             </CardHeader>
                             <CardContent className="pt-6 space-y-4">
                                 {contentList.filter(c => c.serviceId === service.id).map(content => (
-                                    <div key={content.id} className="p-4 border rounded-lg flex items-center justify-between hover:bg-muted/10 transition-colors shadow-sm bg-card">
+                                    <div key={content.id} className="p-4 border rounded-xl flex items-center justify-between hover:bg-muted/5 transition-all shadow-sm bg-card group">
                                         <div className="flex items-center gap-4 min-w-0">
                                             {content.imageUrl ? (
                                                 <div className="relative w-16 h-16 shrink-0">
-                                                    <Image src={content.imageUrl} alt={content.title} fill className="rounded-md object-cover" />
+                                                    <Image src={content.imageUrl} alt={content.title} fill className="rounded-lg object-cover" />
                                                 </div>
                                             ) : (
-                                                <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center shrink-0">
-                                                    <Library className="h-6 w-6 text-muted-foreground/40" />
+                                                <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center shrink-0">
+                                                    <Library className="h-6 w-6 text-muted-foreground/30" />
                                                 </div>
                                             )}
                                             <div className="min-w-0">
-                                                <h3 className="font-semibold truncate">{content.title}</h3>
+                                                <h3 className="font-bold truncate group-hover:text-primary transition-colors">{content.title}</h3>
                                                 <p className="text-sm text-muted-foreground line-clamp-1">{content.content}</p>
                                             </div>
                                         </div>
@@ -211,8 +214,8 @@ export default function ServiceContentPage() {
                                     </div>
                                 ))}
                                 {contentList.filter(c => c.serviceId === service.id).length === 0 && (
-                                    <div className="text-center py-20 border-2 border-dashed rounded-xl bg-muted/5">
-                                        <Library className="h-10 w-10 text-muted-foreground/20 mx-auto mb-2" />
+                                    <div className="text-center py-24 border-2 border-dashed rounded-2xl bg-muted/5">
+                                        <Library className="h-12 w-12 text-muted-foreground/20 mx-auto mb-3" />
                                         <p className="text-muted-foreground italic">No hay contenido todavía para este servicio.</p>
                                     </div>
                                 )}

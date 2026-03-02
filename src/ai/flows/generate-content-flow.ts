@@ -1,11 +1,11 @@
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
- * Configurado con alta permisividad para profesionales de la salud.
+ * Configurado con permisos de nivel experto para profesionales de la salud.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 
 const GenerateContentInputSchema = z.object({
   instructions: z.string().describe('Instrucciones del profesional sobre el contenido a generar.'),
@@ -49,19 +49,19 @@ const prompt = ai.definePrompt({
     ],
   },
   prompt: `Eres un asistente experto para un fisioterapeuta y nutricionista profesional de la clínica FISIKO. 
-  Tu tarea es redactar contenido técnico y motivador basado en las instrucciones del experto.
+  Tu tarea es redactar contenido técnico, preciso y motivador basado en las instrucciones del experto.
   
   Instrucciones del profesional: {{{instructions}}}
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  Reglas de generación:
-  1. Tono clínico, preciso, empático y motivador.
-  2. Para ejercicios: describe la técnica, series, repeticiones y precauciones biomecánicas.
-  3. Para dietas: detalla grupos de alimentos, beneficios nutricionales y pautas de hidratación/suplementación si se requiere.
-  4. NO censures términos médicos, anatómicos o patológicos, ya que este contenido es supervisado por un profesional.
-  5. El título debe ser profesional (ej: "Protocolo de Readaptación de LCA" o "Plan Nutricional Antiinflamatorio").
-  6. Genera el contenido siempre en Español.`,
+  Reglas de generación CRÍTICAS:
+  1. Tono clínico, empático y altamente profesional.
+  2. NO censures términos anatómicos, médicos o de patologías (ej: inflamación, menisco, lesión, dieta hipocalórica). Este contenido es supervisado por un experto.
+  3. Para ejercicios: describe técnica, series, repeticiones y consejos de seguridad.
+  4. Para dietas: detalla grupos de alimentos, beneficios y pautas claras.
+  5. El título debe ser motivador (ej: "Protocolo de Recuperación Activa").
+  6. Responde siempre en Español.`,
 });
 
 const flow = ai.defineFlow(
@@ -72,7 +72,9 @@ const flow = ai.defineFlow(
   },
   async (input) => {
     const { output } = await prompt(input);
-    if (!output) throw new Error('La IA no pudo generar el contenido. Los filtros de seguridad han sido ajustados, pero la solicitud fue vacía.');
+    if (!output) {
+      throw new Error('La IA no pudo generar el contenido. Por favor, intenta ser más descriptivo en las instrucciones.');
+    }
     return output;
   }
 );
