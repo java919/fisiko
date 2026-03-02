@@ -42,24 +42,6 @@ export function AdminSidebar() {
     { href: "/admin/settings/emails", label: "Plantillas de Email", icon: Mail },
   ];
 
-  if (!mounted) {
-    return (
-      <Sidebar className="border-r-0 shadow-xl">
-        <SidebarHeader className="p-6">
-          <div className="flex items-center gap-3">
-            <Logo className="h-10 w-10" />
-            <div className="flex flex-col">
-              <span className="font-headline text-2xl font-black tracking-tighter text-sidebar-foreground">
-                FISIKO
-              </span>
-            </div>
-          </div>
-        </SidebarHeader>
-        <SidebarContent className="px-3" />
-      </Sidebar>
-    );
-  }
-
   return (
     <Sidebar className="border-r-0 shadow-xl">
       <SidebarHeader className="p-6">
@@ -79,7 +61,7 @@ export function AdminSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={mounted ? pathname === item.href : false}
                 tooltip={item.label}
                 className="h-12 text-base rounded-lg transition-all"
               >
