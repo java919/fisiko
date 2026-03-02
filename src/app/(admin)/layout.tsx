@@ -1,1 +1,2 @@
-// Archivo neutralizado para evitar conflictos de rutas con src/app/admin/layout.tsx
+// Archivo desactivado permanentemente para evitar conflictos de rutas paralelas con /admin.
+// No añadir exportaciones en este archivo.

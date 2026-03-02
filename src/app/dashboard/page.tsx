@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { clients, clientServices, services, calendarSlots } from "@/lib/data";
 import { Progress } from "@/components/ui/progress";
-import { Bell, CalendarPlus, Video, Activity } from "lucide-react";
+import { Bell, CalendarPlus, Video, Activity, Cake } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function ClientDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -28,9 +30,28 @@ export default function ClientDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="font-headline text-3xl font-bold tracking-tight text-primary">¡Hola de nuevo, {currentUser.name.split(' ')[0]}!</h1>
-        <p className="text-muted-foreground">Bienvenido a tu portal de bienestar integral en FISIKO.</p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="font-headline text-3xl font-bold tracking-tight text-primary">¡Hola de nuevo, {currentUser.name.split(' ')[0]}!</h1>
+          <p className="text-muted-foreground">Bienvenido a tu portal de bienestar integral en FISIKO.</p>
+        </div>
+        <Card className="w-full md:w-auto p-4 border-2 border-primary/20 bg-primary/5">
+          <div className="flex items-center gap-3">
+            <Cake className="h-5 w-5 text-primary" />
+            <div className="space-y-1">
+              <Label htmlFor="birthday" className="text-xs font-bold uppercase">Mi Cumpleaños</Label>
+              <div className="flex gap-2">
+                <Input 
+                  id="birthday"
+                  type="date" 
+                  defaultValue={currentUser.birthday} 
+                  className="h-8 w-40 text-xs bg-background" 
+                />
+                <Button size="sm" variant="ghost" className="h-8 text-xs">Guardar</Button>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
       
       <div className="grid gap-6 lg:grid-cols-3">
