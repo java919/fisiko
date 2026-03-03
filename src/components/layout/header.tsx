@@ -1,4 +1,5 @@
 "use client"
+import { useState, useEffect } from 'react'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,7 +16,13 @@ import { usePathname } from 'next/navigation'
 import { ChatWidget } from '../chat/chat-widget'
 
 export function Header() {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const isAdmin = pathname.startsWith('/admin');
   const user = {
     name: isAdmin ? "Admin" : "Juan Pérez",
@@ -24,11 +31,18 @@ export function Header() {
   }
   const initials = user.name.split(' ').map(n => n[0]).join('');
 
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
+        <div className="flex-1"></div>
+      </header>
+    );
+  }
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
       <SidebarTrigger className="md:hidden" />
       <div className="flex-1">
-        {/* Can add breadcrumbs or page title here later */}
       </div>
       <div className="flex items-center gap-2 md:gap-4">
         <ChatWidget />

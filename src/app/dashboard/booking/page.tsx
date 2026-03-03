@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,7 +8,15 @@ import { calendarSlots as allSlots, services as allServices } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 
 export default function BookingPage() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [mounted, setMounted] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+
+  useEffect(() => {
+    setMounted(true);
+    setDate(new Date());
+  }, []);
+
+  if (!mounted) return null;
 
   const slotsForSelectedDay = allSlots.filter(
     slot => date && slot.startTime.toDateString() === date.toDateString()

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -15,7 +15,8 @@ import { CalendarSlot } from "@/lib/types";
 
 export default function AdminCalendarPage() {
   const { toast } = useToast();
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [mounted, setMounted] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [slots, setSlots] = useState<CalendarSlot[]>(initialSlots);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -23,6 +24,13 @@ export default function AdminCalendarPage() {
   // Form state
   const [newSlotService, setNewSlotService] = useState("generic");
   const [newSlotTime, setNewSlotTime] = useState("09:00");
+
+  useEffect(() => {
+    setMounted(true);
+    setDate(new Date());
+  }, []);
+
+  if (!mounted) return null;
 
   const slotsForSelectedDay = slots.filter(
     slot => date && slot.startTime.toDateString() === date.toDateString()
@@ -102,7 +110,7 @@ export default function AdminCalendarPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight text-primary">Agenda y Citas</h1>
+          <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight text-primary uppercase">Agenda y Citas</h1>
           <p className="text-sm text-muted-foreground">Control de disponibilidad y reservas del centro.</p>
         </div>
         
