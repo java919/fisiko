@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +22,7 @@ type Props = {
 export default function ClientDetailPage({ params }: Props) {
   const { id } = use(params);
   const { toast } = useToast();
+  const [mounted, setMounted] = useState(false);
   
   // Local state for the prototype
   const [subscriptions, setSubscriptions] = useState(initialClientServices.filter(cs => cs.clientId === id));
@@ -32,6 +32,12 @@ export default function ClientDetailPage({ params }: Props) {
   // Form state for new service
   const [selectedServiceId, setSelectedServiceId] = useState(allServices[0].id);
   const [numSessions, setNumSessions] = useState("10");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const clientSessions = initialSessions
     .filter(s => s.clientId === id)
@@ -56,7 +62,6 @@ export default function ClientDetailPage({ params }: Props) {
       remainingSessions: parseInt(numSessions)
     };
 
-    // Check if subscription already exists to update it or add new
     const existingIndex = subscriptions.findIndex(s => s.serviceId === selectedServiceId);
     if (existingIndex > -1) {
         const updated = [...subscriptions];
