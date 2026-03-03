@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { serviceContent as initialContent, services } from "@/lib/data";
 import { MoreHorizontal, PlusCircle, Library, Sparkles, Loader2, Pencil, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -78,7 +77,7 @@ export default function ServiceContentPage() {
 
     const handleGenerateAI = async () => {
         if (!aiPrompt) {
-            toast({ variant: "destructive", title: "Instrucciones vacías" });
+            toast({ variant: "destructive", title: "Instrucciones vacías", description: "Por favor, escribe qué contenido quieres generar." });
             return;
         }
 
@@ -86,17 +85,22 @@ export default function ServiceContentPage() {
         try {
             const serviceName = services.find(s => s.id === selectedServiceId)?.name;
             const result = await generateHealthContent({
-                instructions: `Genera una guía educativa para ${serviceName}: ${aiPrompt}`,
+                instructions: `Genera una guía educativa técnica para ${serviceName}: ${aiPrompt}`,
                 type: 'exercise',
             });
 
             if (result) {
                 setFormTitle(result.title);
                 setFormContent(result.content);
-                toast({ title: "Contenido generado por IA" });
+                toast({ title: "Contenido generado por IA", description: "Se ha creado una propuesta técnica basada en tus instrucciones." });
             }
-        } catch (error) {
-            toast({ variant: "destructive", title: "Error de IA" });
+        } catch (error: any) {
+            console.error("AI Generation Error:", error);
+            toast({ 
+                variant: "destructive", 
+                title: "Error de IA", 
+                description: error.message || "No se pudo conectar con el asistente. Inténtalo de nuevo." 
+            });
         } finally {
             setIsGenerating(false);
         }
@@ -115,7 +119,7 @@ export default function ServiceContentPage() {
                         <TabsTrigger 
                             key={service.id} 
                             value={service.id}
-                            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border px-4 py-2 rounded-full"
+                            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border px-4 py-2 rounded-full transition-all"
                         >
                             {service.name}
                         </TabsTrigger>
@@ -135,7 +139,7 @@ export default function ServiceContentPage() {
                                     if (!open) resetForm();
                                 }}>
                                     <DialogTrigger asChild>
-                                        <Button onClick={resetForm} size="sm"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Recurso</Button>
+                                        <Button onClick={resetForm} size="sm" className="font-bold"><PlusCircle className="mr-2 h-4 w-4" /> Nuevo Recurso</Button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-2xl w-[95vw] rounded-xl max-h-[90vh] overflow-y-auto">
                                         <form onSubmit={handleSave}>
@@ -146,7 +150,7 @@ export default function ServiceContentPage() {
                                             
                                             <div className="grid gap-4 py-4">
                                                 <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                                                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase">
+                                                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest">
                                                         <Sparkles className="h-4 w-4" /> Asistente IA FISIKO
                                                     </div>
                                                     <div className="flex flex-col sm:flex-row gap-2">
@@ -154,8 +158,9 @@ export default function ServiceContentPage() {
                                                             placeholder="Ej: Consejos posturales para pilates..." 
                                                             value={aiPrompt}
                                                             onChange={(e) => setAiPrompt(e.target.value)}
+                                                            className="bg-background"
                                                         />
-                                                        <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt}>
+                                                        <Button type="button" variant="secondary" onClick={handleGenerateAI} disabled={isGenerating || !aiPrompt} className="shrink-0 font-bold">
                                                             {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
                                                             Generar
                                                         </Button>
@@ -163,19 +168,21 @@ export default function ServiceContentPage() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="title">Título</Label>
+                                                    <Label htmlFor="title">Título del Recurso</Label>
                                                     <Input id="title" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} required />
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="content">Descripción / Guía</Label>
+                                                    <Label htmlFor="content">Descripción / Guía Detallada</Label>
                                                     <Textarea id="content" value={formContent} onChange={(e) => setFormContent(e.target.value)} className="min-h-[150px]" required />
                                                 </div>
                                             </div>
 
                                             <DialogFooter className="gap-2 sm:gap-0 border-t pt-4">
                                                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
-                                                <Button type="submit">{editingContent ? 'Guardar Cambios' : 'Publicar'}</Button>
+                                                <Button type="submit" className="font-bold">
+                                                    {editingContent ? 'Guardar Cambios' : 'Publicar Recurso'}
+                                                </Button>
                                             </DialogFooter>
                                         </form>
                                     </DialogContent>
@@ -183,10 +190,10 @@ export default function ServiceContentPage() {
                             </CardHeader>
                             <CardContent className="p-4 space-y-3">
                                 {contentList.filter(c => c.serviceId === service.id).map(content => (
-                                    <div key={content.id} className="p-3 border rounded-xl flex items-center justify-between hover:bg-muted/5 transition-all shadow-sm bg-card group">
+                                    <div key={content.id} className="p-3 border-2 rounded-xl flex items-center justify-between hover:bg-muted/5 transition-all shadow-sm bg-card group">
                                         <div className="flex items-center gap-4 min-w-0">
-                                            <div className="w-10 h-10 bg-muted rounded flex items-center justify-center shrink-0">
-                                                <Library className="h-5 w-5 text-muted-foreground/40" />
+                                            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                                                <Library className="h-5 w-5 text-primary" />
                                             </div>
                                             <div className="min-w-0">
                                                 <h3 className="font-bold truncate text-sm">{content.title}</h3>
@@ -197,7 +204,7 @@ export default function ServiceContentPage() {
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
+                                            <DropdownMenuContent align="end" className="w-40">
                                                 <DropdownMenuItem onSelect={() => handleEdit(content)}>
                                                     <Pencil className="mr-2 h-4 w-4" /> Editar
                                                 </DropdownMenuItem>
@@ -208,6 +215,12 @@ export default function ServiceContentPage() {
                                         </DropdownMenu>
                                     </div>
                                 ))}
+                                {contentList.filter(c => c.serviceId === service.id).length === 0 && (
+                                    <div className="text-center py-12 border-2 border-dashed rounded-xl">
+                                        <Library className="h-8 w-8 mx-auto mb-2 text-muted-foreground/30" />
+                                        <p className="text-sm text-muted-foreground italic">No hay recursos en esta categoría.</p>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </TabsContent>
