@@ -46,7 +46,7 @@ export function Header() {
       </div>
       <div className="flex items-center gap-2 md:gap-4">
         <ChatWidget />
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">

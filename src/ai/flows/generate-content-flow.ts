@@ -66,6 +66,7 @@ const generateHealthContentFlow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContentFlow:', error);
+      // Extraemos el mensaje de error de forma más limpia para el usuario
       const errorMsg = error.message || 'Error en el asistente de FISIKO.';
       throw new Error(errorMsg);
     }
