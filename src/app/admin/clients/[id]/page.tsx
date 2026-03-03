@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { clients as initialClients, clientServices as initialClientServices, services as allServices, sessions as initialSessions } from "@/lib/data";
-import { ArrowLeft, CheckCircle, PlusCircle, Cake, ShieldCheck, Save } from "lucide-react";
+import { ArrowLeft, CheckCircle, PlusCircle, Cake, ShieldCheck, Save, CalendarCheck2, Activity } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,6 +36,8 @@ export default function ClientDetailPage({ params }: Props) {
   const clientSessions = initialSessions
     .filter(s => s.clientId === id)
     .sort((a,b) => b.completedAt.getTime() - a.completedAt.getTime());
+
+  const totalVisits = clientSessions.length;
 
   if (!client) {
     return <div className="p-8 text-center">Cliente no encontrado</div>;
@@ -93,91 +95,108 @@ export default function ClientDetailPage({ params }: Props) {
         Volver a Clientes
       </Link>
       
-      <div className="flex flex-col md:flex-row items-start gap-6 bg-card p-6 rounded-2xl border-2 shadow-sm">
-        <div className="flex items-center gap-5">
-            <Avatar className="h-24 w-24 border-4 border-primary/10">
-            <AvatarImage src={client.avatarUrl} alt={client.name}/>
-            <AvatarFallback className="text-3xl">{client.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+      <div className="flex flex-col md:flex-row items-start gap-6 bg-card p-6 rounded-2xl border-2 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+            <Activity className="h-32 w-32 text-primary" />
+        </div>
+        
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 w-full">
+            <Avatar className="h-24 w-24 border-4 border-primary/10 shadow-md">
+                <AvatarImage src={client.avatarUrl} alt={client.name}/>
+                <AvatarFallback className="text-3xl font-bold">{client.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
             </Avatar>
-            <div className="space-y-1">
+            <div className="flex-1 space-y-1 text-center sm:text-left">
                 <h1 className="font-headline text-3xl font-bold tracking-tight">{client.name}</h1>
-                <p className="text-muted-foreground">{client.email}</p>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-4 p-3 bg-primary/5 rounded-xl border border-primary/10">
-                    <div className="flex items-center gap-2">
-                      <Cake className="h-4 w-4 text-primary" />
-                      <Label htmlFor="birthday" className="text-xs font-bold uppercase whitespace-nowrap">Fecha de Nacimiento</Label>
+                <p className="text-muted-foreground mb-4">{client.email}</p>
+                
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+                    <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 flex items-center gap-3">
+                        <div className="bg-primary/20 p-2 rounded-lg">
+                            <CalendarCheck2 className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-black text-primary leading-none">{totalVisits}</p>
+                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Visitas Totales</p>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Input 
-                          id="birthday"
-                          type="date" 
-                          defaultValue={client.birthday} 
-                          className="h-9 w-40 text-xs bg-background" 
-                      />
-                      <Button 
-                        size="sm" 
-                        className="h-9 px-4 text-xs font-bold"
-                        onClick={() => toast({ title: "Datos actualizados", description: "Fecha de nacimiento guardada por el administrador." })}
-                      >
-                        Guardar
-                      </Button>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-primary/70 font-medium ml-2">
-                      <ShieldCheck className="h-3 w-3" />
-                      Solo edición Admin
+
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border">
+                        <div className="flex items-center gap-2">
+                          <Cake className="h-4 w-4 text-primary" />
+                          <Label htmlFor="birthday" className="text-xs font-bold uppercase whitespace-nowrap">Fecha Nacimiento</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Input 
+                              id="birthday"
+                              type="date" 
+                              defaultValue={client.birthday} 
+                              className="h-9 w-40 text-xs bg-background" 
+                          />
+                          <Button 
+                            size="sm" 
+                            className="h-9 px-4 text-xs font-bold"
+                            onClick={() => toast({ title: "Datos actualizados", description: "Fecha de nacimiento guardada por el administrador." })}
+                          >
+                            Guardar
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[10px] text-primary/70 font-medium ml-2">
+                          <ShieldCheck className="h-3 w-3" />
+                          Solo Edición Admin
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div className="md:ml-auto">
-            <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
-                <DialogTrigger asChild>
-                    <Button variant="outline" className="font-bold border-2">
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Añadir Bono/Servicio
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <form onSubmit={handleAddService}>
-                        <DialogHeader>
-                            <DialogTitle>Asignar Nuevo Bono</DialogTitle>
-                            <DialogDescription>Selecciona el servicio y el número de sesiones para {client.name}.</DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="service-select">Servicio</Label>
-                                <Select value={selectedServiceId} onValueChange={setSelectedServiceId}>
-                                    <SelectTrigger id="service-select">
-                                        <SelectValue placeholder="Selecciona servicio" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {allServices.map(s => (
-                                            <SelectItem key={s.id} value={s.id}>{s.name} ({s.price}€)</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+            <div className="sm:ml-auto w-full sm:w-auto">
+                <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full sm:w-auto font-bold border-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Añadir Bono/Servicio
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <form onSubmit={handleAddService}>
+                            <DialogHeader>
+                                <DialogTitle>Asignar Nuevo Bono</DialogTitle>
+                                <DialogDescription>Selecciona el servicio y el número de sesiones para {client.name}.</DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="service-select">Servicio</Label>
+                                    <Select value={selectedServiceId} onValueChange={setSelectedServiceId}>
+                                        <SelectTrigger id="service-select">
+                                            <SelectValue placeholder="Selecciona servicio" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {allServices.map(s => (
+                                                <SelectItem key={s.id} value={s.id}>{s.name} ({s.price}€)</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="sessions">Número de Sesiones</Label>
+                                    <Input 
+                                        id="sessions" 
+                                        type="number" 
+                                        value={numSessions} 
+                                        onChange={(e) => setNumSessions(e.target.value)}
+                                        min="1"
+                                        required 
+                                    />
+                                </div>
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="sessions">Número de Sesiones</Label>
-                                <Input 
-                                    id="sessions" 
-                                    type="number" 
-                                    value={numSessions} 
-                                    onChange={(e) => setNumSessions(e.target.value)}
-                                    min="1"
-                                    required 
-                                />
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button type="submit" className="w-full font-bold">
-                                <Save className="mr-2 h-4 w-4" />
-                                Asignar Bono
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+                            <DialogFooter>
+                                <Button type="submit" className="w-full font-bold">
+                                    <Save className="mr-2 h-4 w-4" />
+                                    Asignar Bono
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
       </div>
       
@@ -230,19 +249,21 @@ export default function ClientDetailPage({ params }: Props) {
           </CardContent>
         </Card>
 
-        <Card className="border-2 shadow-sm h-fit">
-          <CardHeader>
-            <CardTitle className="font-headline">Historial e Ingresos</CardTitle>
+        <Card className="border-2 shadow-sm h-fit overflow-hidden">
+          <CardHeader className="bg-primary/5 border-b pb-4">
+            <CardTitle className="font-headline text-lg flex items-center gap-2">
+                <CalendarCheck2 className="h-5 w-5 text-primary" />
+                Historial e Ingresos
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                  <TableRow className="hover:bg-transparent">
-                      <TableHead className="pl-6">Servicio</TableHead>
-                      <TableHead>Fecha</TableHead>
-                      <TableHead className="text-right pr-6">Ingreso</TableHead>
-                  </TableRow>
-              </TableHeader>
+                  <TableRow className="hover:bg-transparent bg-muted/20">
+                      <TableHead className="pl-6 font-bold">Servicio</TableHead>
+                      <TableHead className="font-bold">Fecha</TableHead>
+                      <TableHead className="text-right pr-6 font-bold">Ingreso</TableHead>
+                  </TableHeader>
               <TableBody>
                   {clientSessions.length > 0 ? clientSessions.map(session => {
                       const service = allServices.find(s => s.id === session.serviceId);
@@ -260,6 +281,14 @@ export default function ClientDetailPage({ params }: Props) {
                   )}
               </TableBody>
             </Table>
+            <div className="p-4 bg-muted/10 border-t">
+                <div className="flex justify-between items-center px-2">
+                    <span className="text-sm font-bold uppercase text-muted-foreground">Ingreso Total</span>
+                    <span className="text-xl font-black text-primary">
+                        {clientSessions.reduce((acc, s) => acc + s.revenue, 0)}€
+                    </span>
+                </div>
+            </div>
           </CardContent>
         </Card>
       </div>
