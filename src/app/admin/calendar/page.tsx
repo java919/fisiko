@@ -21,7 +21,7 @@ export default function AdminCalendarPage() {
   const [isConfiguring, setIsConfiguring] = useState(false);
 
   // Form state
-  const [newSlotService, setNewSlotService] = useState("generic"); // "generic" means no service specified
+  const [newSlotService, setNewSlotService] = useState("generic");
   const [newSlotTime, setNewSlotTime] = useState("09:00");
 
   const slotsForSelectedDay = slots.filter(
@@ -59,7 +59,6 @@ export default function AdminCalendarPage() {
     if (!date) return;
     setIsConfiguring(true);
 
-    // Simular una pequeña carga para feedback visual
     setTimeout(() => {
       const morningHours = ["09:00", "10:00", "11:00", "12:00", "13:00"];
       const newQuickSlots = morningHours.map((time, index) => {
@@ -73,12 +72,11 @@ export default function AdminCalendarPage() {
           id: `quick-${date.getTime()}-${index}`,
           startTime: start,
           endTime: end,
-          serviceId: undefined, // Default to generic/free slots for quick setup
+          serviceId: undefined, // Hueco genérico
           isBooked: false
         };
       });
 
-      // Evitar duplicados exactos si ya existen
       const filteredNewSlots = newQuickSlots.filter(newSlot => 
         !slots.some(existing => existing.startTime.getTime() === newSlot.startTime.getTime())
       );
@@ -93,7 +91,7 @@ export default function AdminCalendarPage() {
         setSlots([...slots, ...filteredNewSlots]);
         toast({
           title: "Horario configurado",
-          description: `Se han añadido ${filteredNewSlots.length} huecos libres para la jornada de mañana.`
+          description: `Se han añadido ${filteredNewSlots.length} huecos libres genéricos para la mañana.`
         });
       }
       setIsConfiguring(false);
@@ -136,7 +134,7 @@ export default function AdminCalendarPage() {
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="service">Servicio Condicionante</Label>
+                      <Label htmlFor="service">Tipo de Hueco</Label>
                       <Select value={newSlotService} onValueChange={setNewSlotService}>
                         <SelectTrigger id="service">
                           <SelectValue placeholder="Selecciona servicio" />
