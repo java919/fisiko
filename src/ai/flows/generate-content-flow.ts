@@ -23,6 +23,7 @@ export type GenerateContentOutput = z.infer<typeof GenerateContentOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'contentPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: GenerateContentInputSchema },
   output: { schema: GenerateContentOutputSchema },
   config: {
@@ -60,12 +61,14 @@ const generateHealthContentFlow = ai.defineFlow(
     try {
       const { output } = await prompt(input);
       if (!output) {
-        throw new Error('La IA no pudo procesar la solicitud. Revisa las instrucciones.');
+        throw new Error('La IA no pudo procesar la solicitud. Por favor, intenta ser más específico en tus instrucciones.');
       }
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContentFlow:', error);
-      throw new Error(error.message || 'Error en el asistente de FISIKO.');
+      // Extraemos el mensaje de error de forma más limpia para el usuario
+      const errorMsg = error.message || 'Error en el asistente de FISIKO.';
+      throw new Error(errorMsg);
     }
   }
 );
