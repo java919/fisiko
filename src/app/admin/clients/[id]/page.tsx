@@ -263,7 +263,8 @@ export default function ClientDetailPage({ params }: Props) {
                       <TableHead className="pl-6 font-bold">Servicio</TableHead>
                       <TableHead className="font-bold">Fecha</TableHead>
                       <TableHead className="text-right pr-6 font-bold">Ingreso</TableHead>
-                  </TableHeader>
+                  </TableRow>
+              </TableHeader>
               <TableBody>
                   {clientSessions.length > 0 ? clientSessions.map(session => {
                       const service = allServices.find(s => s.id === session.serviceId);
