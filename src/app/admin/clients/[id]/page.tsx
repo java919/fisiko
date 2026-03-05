@@ -24,12 +24,10 @@ export default function ClientDetailPage({ params }: Props) {
   const { toast } = useToast();
   const [mounted, setMounted] = useState(false);
   
-  // Local state for the prototype
   const [subscriptions, setSubscriptions] = useState(initialClientServices.filter(cs => cs.clientId === id));
   const [client, setClient] = useState(initialClients.find(c => c.id === id));
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   
-  // Form state for new service
   const [selectedServiceId, setSelectedServiceId] = useState(allServices[0].id);
   const [numSessions, setNumSessions] = useState("10");
 

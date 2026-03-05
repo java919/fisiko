@@ -2,7 +2,6 @@
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
  * Configurado con permisos TOTALES para profesionales de la salud (FISIKO).
- * Este flujo utiliza el modelo gemini-1.5-flash de Google AI.
  */
 
 import { ai } from '@/ai/genkit';
@@ -23,7 +22,7 @@ export type GenerateContentOutput = z.infer<typeof GenerateContentOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'contentPrompt',
-  model: 'gemini-1.5-flash',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: GenerateContentInputSchema },
   output: { schema: GenerateContentOutputSchema },
   config: {
@@ -32,7 +31,6 @@ const prompt = ai.definePrompt({
       { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
       { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
       { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-      { category: 'HARM_CATEGORY_CIVIC_INTEGRITY', threshold: 'BLOCK_NONE' },
     ],
   },
   prompt: `Eres un asistente experto de FISIKO para un profesional sanitario colegiado (Fisioterapeuta y Nutricionista). 

@@ -23,14 +23,6 @@ export function Header() {
     setMounted(true);
   }, []);
 
-  const isAdmin = pathname.startsWith('/admin');
-  const user = {
-    name: isAdmin ? "Admin" : "Juan Pérez",
-    email: isAdmin ? "admin@wellnessflow.app" : "juan.perez@example.com",
-    avatar: isAdmin ? "https://picsum.photos/seed/admin/100/100" : "https://picsum.photos/seed/juan/100/100"
-  }
-  const initials = user.name.split(' ').map(n => n[0]).join('');
-
   if (!mounted) {
     return (
       <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -38,6 +30,14 @@ export function Header() {
       </header>
     );
   }
+
+  const isAdmin = pathname.startsWith('/admin');
+  const user = {
+    name: isAdmin ? "Admin" : "Juan Pérez",
+    email: isAdmin ? "admin@wellnessflow.app" : "juan.perez@example.com",
+    avatar: isAdmin ? "https://picsum.photos/seed/admin/100/100" : "https://picsum.photos/seed/juan/100/100"
+  }
+  const initials = user.name.split(' ').map(n => n[0]).join('');
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
