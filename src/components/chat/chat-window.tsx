@@ -8,20 +8,33 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { clients as allClients } from "@/lib/data";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const mockMessages = [
-  { id: 'm1', senderId: '1', content: 'Hola! Quería saber si hay hueco para pilates mañana.', timestamp: new Date(Date.now() - 1000 * 60 * 5), isRead: false },
-  { id: 'm2', senderId: 'admin', content: 'Hola Juan! Sí, a las 10:00. Te vale?', timestamp: new Date(Date.now() - 1000 * 60 * 4), isRead: true },
-  { id: 'm3', senderId: '2', content: 'Gracias por la sesión de hoy!', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), isRead: false },
+  { id: 'm1', senderId: '1', content: 'Hola! Quería saber si hay hueco para pilates mañana.', timestamp: new Date(), isRead: false },
+  { id: 'm2', senderId: 'admin', content: 'Hola Juan! Sí, a las 10:00. Te vale?', timestamp: new Date(), isRead: true },
+  { id: 'm3', senderId: '2', content: 'Gracias por la sesión de hoy!', timestamp: new Date(), isRead: false },
 ];
-
 
 export function ChatWindow() {
     const pathname = usePathname();
     const isAdmin = pathname.startsWith('/admin');
-    const [selectedContact, setSelectedContact] = useState(isAdmin ? allClients[0] : { id: 'admin', name: 'Admin', avatarUrl: 'https://picsum.photos/seed/admin/150/150' });
-    const currentUserId = isAdmin ? 'admin' : '1'; // Mocking current user is Juan Pérez
+    
+    // Safety check for empty clients
+    const defaultContact = isAdmin && allClients.length > 0 
+        ? allClients[0] 
+        : { id: 'admin', name: 'Soporte FISIKO', avatarUrl: 'https://picsum.photos/seed/admin/150/150' };
+
+    const [selectedContact, setSelectedContact] = useState(defaultContact);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
+
+    const currentUserId = isAdmin ? 'admin' : '1'; 
 
     const relevantMessages = (contactId: string) => {
         if (isAdmin) {
@@ -36,7 +49,7 @@ export function ChatWindow() {
 
     return (
         <div className="flex h-full flex-col">
-            {isAdmin && (
+            {isAdmin && allClients.length > 0 && (
                 <div className="border-b pb-2 mb-2">
                     <h3 className="font-semibold mb-2 px-1">Contactos</h3>
                     <ScrollArea className="h-[150px]">
