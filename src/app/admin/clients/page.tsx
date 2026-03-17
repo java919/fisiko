@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -20,6 +19,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function ClientsPage() {
   const { toast } = useToast();
+  const [mounted, setMounted] = useState(false);
   const [clients, setClients] = useState(initialClients);
   const [clientServices, setClientServices] = useState(initialClientServices);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -29,15 +29,21 @@ export default function ClientsPage() {
   const [newEmail, setNewEmail] = useState("");
   const [newBirthday, setNewBirthday] = useState("");
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   const handleAddClient = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Pick a random placeholder avatar for the new client
     const avatarPlaceholders = PlaceHolderImages.filter(img => img.id.includes('avatar'));
     const randomAvatar = avatarPlaceholders[Math.floor(Math.random() * avatarPlaceholders.length)];
     
     const newClient = {
       id: `client-${Date.now()}`,
+      clinicId: 'clinic-1',
       name: newName,
       email: newEmail,
       avatarUrl: randomAvatar?.imageUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
@@ -56,7 +62,6 @@ export default function ClientsPage() {
     });
   };
 
-  // Logic to classify clients
   const clientsWithStatus = clients.map(client => {
     const subscriptions = clientServices.filter(cs => cs.clientId === client.id);
     const activeSubscriptions = subscriptions.filter(sub => sub.remainingSessions > 0);

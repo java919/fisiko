@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
@@ -23,7 +22,7 @@ export type GenerateContentOutput = z.infer<typeof GenerateContentOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'contentPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: 'gemini-1.5-flash',
   input: { schema: GenerateContentInputSchema },
   output: { schema: GenerateContentOutputSchema },
   config: {

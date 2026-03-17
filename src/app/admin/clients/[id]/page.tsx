@@ -29,7 +29,7 @@ export default function ClientDetailPage({ params }: Props) {
   const [client, setClient] = useState(initialClients.find(c => c.id === id));
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   
-  const [selectedServiceId, setSelectedServiceId] = useState(allServices[0].id);
+  const [selectedServiceId, setSelectedServiceId] = useState(allServices[0]?.id || "");
   const [numSessions, setNumSessions] = useState("10");
 
   useEffect(() => {
