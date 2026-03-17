@@ -34,8 +34,8 @@ export function Header() {
   const isAdmin = pathname.startsWith('/admin');
   const user = {
     name: isAdmin ? "Admin" : "Juan Pérez",
-    email: isAdmin ? "admin@wellnessflow.app" : "juan.perez@example.com",
-    avatar: isAdmin ? "https://picsum.photos/seed/admin/100/100" : "https://picsum.photos/seed/juan/100/100"
+    email: isAdmin ? "admin@fisiko.com" : "juan.perez@example.com",
+    avatar: isAdmin ? "https://images.unsplash.com/photo-1531123414780-f74242c2b052?w=100" : "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?w=100"
   }
   const initials = user.name.split(' ').map(n => n[0]).join('');
 
@@ -48,20 +48,23 @@ export function Header() {
         <ChatWidget />
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full overflow-hidden border-2 border-primary/20">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel className="font-bold flex flex-col">
+              <span>{user.name}</span>
+              <span className="text-[10px] text-muted-foreground font-normal">{user.email}</span>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Perfil</DropdownMenuItem>
-            <DropdownMenuItem>Ajustes</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Mi Perfil</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Ajustes</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem asChild className="text-destructive cursor-pointer">
               <Link href="/login">Cerrar sesión</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

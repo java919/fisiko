@@ -59,13 +59,12 @@ const generateHealthContentFlow = ai.defineFlow(
     try {
       const { output } = await prompt(input);
       if (!output) {
-        throw new Error('La IA no pudo procesar la solicitud. Por favor, intenta ser más específico en tus instrucciones.');
+        throw new Error('La IA no pudo procesar la solicitud.');
       }
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContentFlow:', error);
-      const errorMsg = error.message || 'Error en el asistente de FISIKO.';
-      throw new Error(errorMsg);
+      throw new Error(error.message || 'Error en el asistente de FISIKO.');
     }
   }
 );

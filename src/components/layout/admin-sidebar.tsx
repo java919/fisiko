@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -18,13 +17,13 @@ import {
   LayoutDashboard,
   Users,
   Calendar,
-  FileText,
   Mail,
   LogOut,
   Euro,
   Tag,
   Sparkles,
   Library,
+  Settings,
 } from "lucide-react";
 
 export function AdminSidebar() {
@@ -41,9 +40,10 @@ export function AdminSidebar() {
     { href: "/admin/calendar", label: "Calendario", icon: Calendar },
     { href: "/admin/services", label: "Servicios y Bonos", icon: Tag },
     { href: "/admin/billing", label: "Facturación", icon: Euro },
-    { href: "/admin/content/services", label: "Contenido por Servicio", icon: Library },
-    { href: "/admin/content/personalized", label: "Planes Personalizados", icon: Sparkles },
-    { href: "/admin/settings/emails", label: "Plantillas de Email", icon: Mail },
+    { href: "/admin/content/services", label: "Biblioteca", icon: Library },
+    { href: "/admin/content/personalized", label: "IA: Planes Técnicos", icon: Sparkles },
+    { href: "/admin/settings/emails", label: "Plantillas Email", icon: Mail },
+    { href: "/admin/settings/clinic", label: "Ajustes Clínica", icon: Settings },
   ];
 
   return (
@@ -55,7 +55,7 @@ export function AdminSidebar() {
             <span className="font-headline text-2xl font-black tracking-tighter text-sidebar-foreground">
               FISIKO
             </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">Administración</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">Admin</span>
           </div>
         </Link>
       </SidebarHeader>

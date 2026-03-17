@@ -56,6 +56,7 @@ export default function ClientDetailPage({ params }: Props) {
     const newSub = {
       clientId: id,
       serviceId: selectedServiceId,
+      clinicId: client.clinicId,
       totalSessions: parseInt(numSessions),
       remainingSessions: parseInt(numSessions)
     };
