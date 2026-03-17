@@ -31,7 +31,7 @@ export function Header() {
     );
   }
 
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname?.startsWith('/admin');
   
   const user = {
     name: isAdmin ? "Admin Clínica" : "Juan Pérez",
@@ -40,13 +40,17 @@ export function Header() {
       ? "https://images.unsplash.com/photo-1531123414780-f74242c2b052?w=100" 
       : "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?w=100"
   }
-  const initials = user.name.split(' ').map(n => n[0]).join('');
+  
+  const initials = user.name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase() || 'U';
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
       <SidebarTrigger className="md:hidden" />
-      <div className="flex-1">
-      </div>
+      <div className="flex-1"></div>
       <div className="flex items-center gap-2 md:gap-4">
         <ChatWidget />
         <DropdownMenu modal={false}>

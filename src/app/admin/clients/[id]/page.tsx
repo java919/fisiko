@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, use, useEffect } from "react";
@@ -45,12 +44,11 @@ export default function ClientDetailPage({ params }: Props) {
   const totalVisits = clientSessions.length;
 
   if (!client) {
-    return <div className="p-8 text-center">Cliente no encontrado</div>;
+    return <div className="p-8 text-center font-bold">Cliente no encontrado</div>;
   }
 
   const handleAddService = (e: React.FormEvent) => {
     e.preventDefault();
-    
     const service = allServices.find(s => s.id === selectedServiceId);
     if (!service) return;
 
@@ -62,36 +60,35 @@ export default function ClientDetailPage({ params }: Props) {
       remainingSessions: parseInt(numSessions)
     };
 
-    const existingIndex = subscriptions.findIndex(s => s.serviceId === selectedServiceId);
-    if (existingIndex > -1) {
-        const updated = [...subscriptions];
-        updated[existingIndex].totalSessions += newSub.totalSessions;
-        updated[existingIndex].remainingSessions += newSub.remainingSessions;
-        setSubscriptions(updated);
-    } else {
-        setSubscriptions([...subscriptions, newSub]);
-    }
+    setSubscriptions(prev => {
+      const existingIndex = prev.findIndex(s => s.serviceId === selectedServiceId);
+      if (existingIndex > -1) {
+          const updated = [...prev];
+          updated[existingIndex].totalSessions += newSub.totalSessions;
+          updated[existingIndex].remainingSessions += newSub.remainingSessions;
+          return updated;
+      }
+      return [...prev, newSub];
+    });
 
     setIsAddServiceOpen(false);
     toast({
       title: "Bono añadido",
-      description: `Se han asignado ${numSessions} sesiones de ${service.name} a ${client.name}.`
+      description: `Se han asignado ${numSessions} sesiones a ${client.name}.`
     });
   };
 
   const handleValidateSession = (serviceId: string) => {
-    const updated = subscriptions.map(s => {
+    setSubscriptions(prev => prev.map(s => {
         if (s.serviceId === serviceId && s.remainingSessions > 0) {
             return { ...s, remainingSessions: s.remainingSessions - 1 };
         }
         return s;
-    });
-    setSubscriptions(updated);
-    toast({
-      title: "Sesión validada",
-      description: "Se ha descontado una sesión del bono correctamente."
-    });
+    }));
+    toast({ title: "Sesión validada", description: "Se ha descontado una sesión correctamente." });
   };
+
+  const clientInitials = client.name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
 
   return (
     <div className="space-y-6">
@@ -108,7 +105,7 @@ export default function ClientDetailPage({ params }: Props) {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 w-full">
             <Avatar className="h-24 w-24 border-4 border-primary/10 shadow-md">
                 <AvatarImage src={client.avatarUrl} alt={client.name}/>
-                <AvatarFallback className="text-3xl font-bold">{client.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback className="text-3xl font-bold">{clientInitials}</AvatarFallback>
             </Avatar>
             <div className="flex-1 space-y-1 text-center sm:text-left">
                 <h1 className="font-headline text-3xl font-bold tracking-tight">{client.name}</h1>
@@ -128,49 +125,36 @@ export default function ClientDetailPage({ params }: Props) {
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border">
                         <div className="flex items-center gap-2">
                           <Cake className="h-4 w-4 text-primary" />
-                          <Label htmlFor="birthday" className="text-xs font-bold uppercase whitespace-nowrap">Fecha Nacimiento</Label>
+                          <Label className="text-xs font-bold uppercase whitespace-nowrap">Nacimiento</Label>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Input 
-                              id="birthday"
-                              type="date" 
-                              defaultValue={client.birthday} 
-                              className="h-9 w-40 text-xs bg-background" 
-                          />
-                          <Button 
-                            size="sm" 
-                            className="h-9 px-4 text-xs font-bold"
-                            onClick={() => toast({ title: "Datos actualizados", description: "Fecha de nacimiento guardada por el administrador." })}
-                          >
-                            Guardar
-                          </Button>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[10px] text-primary/70 font-medium ml-2">
-                          <ShieldCheck className="h-3 w-3" />
-                          Solo Edición Admin
-                        </div>
+                        <Input 
+                            type="date" 
+                            defaultValue={client.birthday} 
+                            readOnly
+                            className="h-9 w-40 text-xs bg-background cursor-not-allowed" 
+                        />
                     </div>
                 </div>
             </div>
             <div className="sm:ml-auto w-full sm:w-auto">
                 <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="outline" className="w-full sm:w-auto font-bold border-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                        <Button variant="outline" className="w-full sm:w-auto font-bold border-2">
                             <PlusCircle className="mr-2 h-4 w-4" />
-                            Añadir Bono/Servicio
+                            Añadir Bono
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <form onSubmit={handleAddService}>
                             <DialogHeader>
                                 <DialogTitle>Asignar Nuevo Bono</DialogTitle>
-                                <DialogDescription>Selecciona el servicio y el número de sesiones para {client.name}.</DialogDescription>
+                                <DialogDescription>Selecciona el servicio para {client.name}.</DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="service-select">Servicio</Label>
+                                    <Label>Servicio</Label>
                                     <Select value={selectedServiceId} onValueChange={setSelectedServiceId}>
-                                        <SelectTrigger id="service-select">
+                                        <SelectTrigger>
                                             <SelectValue placeholder="Selecciona servicio" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -181,9 +165,8 @@ export default function ClientDetailPage({ params }: Props) {
                                     </Select>
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="sessions">Número de Sesiones</Label>
+                                    <Label>Sesiones</Label>
                                     <Input 
-                                        id="sessions" 
                                         type="number" 
                                         value={numSessions} 
                                         onChange={(e) => setNumSessions(e.target.value)}
@@ -193,10 +176,7 @@ export default function ClientDetailPage({ params }: Props) {
                                 </div>
                             </div>
                             <DialogFooter>
-                                <Button type="submit" className="w-full font-bold">
-                                    <Save className="mr-2 h-4 w-4" />
-                                    Asignar Bono
-                                </Button>
+                                <Button type="submit" className="w-full font-bold">Asignar</Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -212,89 +192,60 @@ export default function ClientDetailPage({ params }: Props) {
               <CheckCircle className="h-5 w-5 text-primary" />
               Servicios Activos
             </CardTitle>
-            <CardDescription>Gestión de bonos y sesiones restantes para este cliente.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
               {subscriptions.map(sub => {
                   const service = allServices.find(s => s.id === sub.serviceId);
                   if (!service) return null;
                   return (
-                      <div key={service.id} className="p-5 border-2 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-muted/5 hover:border-primary/20 transition-all">
+                      <div key={service.id} className="p-5 border-2 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-muted/5">
                           <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                  <h3 className="font-bold text-lg">{service.name}</h3>
-                                  <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">{service.price}€ / sesión</span>
-                              </div>
-                              <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+                              <h3 className="font-bold text-lg">{service.name}</h3>
+                              <p className="text-sm text-muted-foreground">{service.description}</p>
                           </div>
-                          <div className="flex items-center gap-6 shrink-0 w-full md:w-auto justify-between md:justify-end">
-                              <div className="flex gap-4">
-                                <div className="text-center">
-                                    <p className="text-2xl font-black text-primary">{sub.remainingSessions}</p>
-                                    <p className="text-[10px] text-muted-foreground uppercase font-bold">restantes</p>
-                                </div>
-                                <Separator orientation="vertical" className="h-10" />
-                                <div className="text-center">
-                                    <p className="text-2xl font-black">{sub.totalSessions}</p>
-                                    <p className="text-[10px] text-muted-foreground uppercase font-bold">totales</p>
-                                </div>
+                          <div className="flex items-center gap-6">
+                              <div className="text-center">
+                                  <p className="text-2xl font-black text-primary">{sub.remainingSessions}</p>
+                                  <p className="text-[10px] text-muted-foreground uppercase font-bold">restantes</p>
                               </div>
                               <Button 
                                 disabled={sub.remainingSessions === 0} 
-                                className="font-bold shadow-sm"
                                 onClick={() => handleValidateSession(service.id)}
                               >
-                                  Validar Sesión
+                                Validar
                               </Button>
                           </div>
                       </div>
                   )
               })}
-              {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-12 italic">Sin servicios activos actualmente.</p>}
+              {subscriptions.length === 0 && <p className="text-muted-foreground text-center py-8 italic">Sin servicios activos.</p>}
           </CardContent>
         </Card>
 
-        <Card className="border-2 shadow-sm h-fit overflow-hidden">
-          <CardHeader className="bg-primary/5 border-b pb-4">
-            <CardTitle className="font-headline text-lg flex items-center gap-2">
-                <CalendarCheck2 className="h-5 w-5 text-primary" />
-                Historial e Ingresos
-            </CardTitle>
+        <Card className="border-2 shadow-sm h-fit">
+          <CardHeader>
+            <CardTitle className="font-headline text-lg">Historial</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                  <TableRow className="hover:bg-transparent bg-muted/20">
-                      <TableHead className="pl-6 font-bold">Servicio</TableHead>
-                      <TableHead className="font-bold">Fecha</TableHead>
-                      <TableHead className="text-right pr-6 font-bold">Ingreso</TableHead>
+                  <TableRow>
+                      <TableHead className="pl-6">Servicio</TableHead>
+                      <TableHead className="text-right pr-6">Ingreso</TableHead>
                   </TableRow>
               </TableHeader>
               <TableBody>
-                  {clientSessions.length > 0 ? clientSessions.map(session => {
-                      const service = allServices.find(s => s.id === session.serviceId);
-                      return (
-                          <TableRow key={session.id}>
-                              <TableCell className="font-bold pl-6">{service?.name}</TableCell>
-                              <TableCell className="text-xs">{session.completedAt.toLocaleDateString('es-ES')}</TableCell>
-                              <TableCell className="text-right pr-6 font-black text-primary">{session.revenue}€</TableCell>
-                          </TableRow>
-                      )
-                  }) : (
-                      <TableRow>
-                          <TableCell colSpan={3} className="text-center h-32 text-muted-foreground italic">Sin sesiones registradas.</TableCell>
+                  {clientSessions.map(session => (
+                      <TableRow key={session.id}>
+                          <TableCell className="pl-6 font-medium">
+                              {allServices.find(s => s.id === session.serviceId)?.name}
+                              <p className="text-[10px] text-muted-foreground">{session.completedAt.toLocaleDateString()}</p>
+                          </TableCell>
+                          <TableCell className="text-right pr-6 font-bold text-primary">{session.revenue}€</TableCell>
                       </TableRow>
-                  )}
+                  ))}
               </TableBody>
             </Table>
-            <div className="p-4 bg-muted/10 border-t">
-                <div className="flex justify-between items-center px-2">
-                    <span className="text-sm font-bold uppercase text-muted-foreground">Ingreso Total</span>
-                    <span className="text-xl font-black text-primary">
-                        {clientSessions.reduce((acc, s) => acc + s.revenue, 0)}€
-                    </span>
-                </div>
-            </div>
           </CardContent>
         </Card>
       </div>

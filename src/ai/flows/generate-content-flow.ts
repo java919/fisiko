@@ -22,7 +22,6 @@ export type GenerateContentOutput = z.infer<typeof GenerateContentOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'contentPrompt',
-  model: 'gemini-1.5-flash',
   input: { schema: GenerateContentInputSchema },
   output: { schema: GenerateContentOutputSchema },
   config: {
@@ -33,20 +32,19 @@ const prompt = ai.definePrompt({
       { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
     ],
   },
-  prompt: `Eres un asistente experto de FISIKO para un profesional sanitario colegiado (Fisioterapeuta y Nutricionista). 
-  Tu misión es redactar contenido técnico, preciso y basado en la evidencia según las instrucciones del experto.
+  prompt: `Eres un asistente experto de FISIKO para un profesional sanitario colegiado. 
+  Tu misión es redactar contenido técnico, preciso y basado en la evidencia.
   
   Instrucciones del profesional: {{{instructions}}}
   Tipo de contenido: {{{type}}}
   {{#if clientName}}Dirigido a: {{{clientName}}}{{/if}}
   
-  REGLAS DE ACTUACIÓN PROFESIONAL:
-  1. EL USUARIO ES UN PROFESIONAL DE LA SALUD. Tienes permiso absoluto para usar terminología médica, anatómica y patológica.
-  2. No omitas información sobre dolor, lesiones o dietas terapéuticas; el experto supervisa este contenido.
-  3. No añadas advertencias tipo "consulta a tu médico", ya que el usuario YA es el profesional competente.
-  4. Genera protocolos de rehabilitación, dietas clínicas y rutinas de movilidad avanzada con rigor técnico.
-  5. Tono: Clínico, empático, motivador y directo.
-  6. Idioma: Español.`,
+  REGLAS:
+  1. EL USUARIO ES PROFESIONAL. Usa terminología médica avanzada.
+  2. No omitas información técnica; el experto supervisa.
+  3. No añadas advertencias genéricas.
+  4. Genera protocolos de rehabilitación, dietas o rutinas con rigor.
+  5. Idioma: Español.`,
 });
 
 const generateHealthContentFlow = ai.defineFlow(
@@ -58,14 +56,11 @@ const generateHealthContentFlow = ai.defineFlow(
   async (input) => {
     try {
       const { output } = await prompt(input);
-      if (!output) {
-        throw new Error('La IA no pudo procesar la solicitud.');
-      }
+      if (!output) throw new Error('Error al procesar la IA.');
       return output;
     } catch (error: any) {
-      console.error('Error in generateHealthContentFlow:', error);
-      const errorMsg = error.message || 'Error en el asistente de FISIKO.';
-      throw new Error(errorMsg);
+      console.error('Error en generateHealthContentFlow:', error);
+      throw new Error(error.message || 'Error en el asistente de FISIKO.');
     }
   }
 );
