@@ -1,3 +1,4 @@
+
 "use client"
 import { useState, useEffect } from 'react'
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -32,10 +33,13 @@ export function Header() {
   }
 
   const isAdmin = pathname.startsWith('/admin');
+  
   const user = {
-    name: isAdmin ? "Admin" : "Juan Pérez",
+    name: isAdmin ? "Admin Clínica" : "Juan Pérez",
     email: isAdmin ? "admin@fisiko.com" : "juan.perez@example.com",
-    avatar: isAdmin ? "https://images.unsplash.com/photo-1531123414780-f74242c2b052?w=100" : "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?w=100"
+    avatar: isAdmin 
+      ? "https://images.unsplash.com/photo-1531123414780-f74242c2b052?w=100" 
+      : "https://images.unsplash.com/photo-1594672830234-ba4cfe1202dc?w=100"
   }
   const initials = user.name.split(' ').map(n => n[0]).join('');
 

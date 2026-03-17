@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Flujo de Genkit para generar contenido de fisioterapia y bienestar.
@@ -64,7 +65,8 @@ const generateHealthContentFlow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Error in generateHealthContentFlow:', error);
-      throw new Error(error.message || 'Error en el asistente de FISIKO.');
+      const errorMsg = error.message || 'Error en el asistente de FISIKO.';
+      throw new Error(errorMsg);
     }
   }
 );

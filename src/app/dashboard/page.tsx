@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react";
@@ -20,12 +21,21 @@ export default function ClientDashboard() {
     return null;
   }
 
-  const currentUser = clients.find(c => c.id === '1');
-  const userServices = clientServices.filter(cs => cs.clientId === currentUser?.id);
+  // En una app real, aquí obtendríamos el ID del usuario desde la sesión (Auth)
+  const currentUserId = '1'; 
+  const currentUser = clients.find(c => c.id === currentUserId);
+  const userServices = clientServices.filter(cs => cs.clientId === currentUserId);
   const now = new Date();
-  const upcomingAppointment = calendarSlots.find(slot => slot.bookedBy === currentUser?.id && slot.startTime > now);
+  const upcomingAppointment = calendarSlots.find(slot => slot.bookedBy === currentUserId && slot.startTime > now);
   
-  if (!currentUser) return null;
+  if (!currentUser) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[70vh] space-y-4">
+        <p className="text-muted-foreground">No se ha podido cargar tu perfil.</p>
+        <Button asChild><Link href="/login">Volver al Login</Link></Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -64,7 +74,7 @@ export default function ClientDashboard() {
               <CardDescription>Controla tus sesiones disponibles y renueva cuando lo necesites.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
-              {userServices.map(sub => {
+              {userServices.length > 0 ? userServices.map(sub => {
                 const service = services.find(s => s.id === sub.serviceId);
                 if (!service) return null;
                 const progress = (sub.remainingSessions / sub.totalSessions) * 100;
@@ -82,8 +92,7 @@ export default function ClientDashboard() {
                     <Progress value={progress} className="h-3" />
                   </div>
                 )
-              })}
-              {userServices.length === 0 && (
+              }) : (
                 <div className="text-center py-10">
                   <p className="text-muted-foreground italic">No tienes bonos activos en este momento.</p>
                   <Button variant="outline" className="mt-4" asChild>
