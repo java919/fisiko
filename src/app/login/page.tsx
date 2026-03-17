@@ -9,25 +9,45 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Logo } from '@/components/logo'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ShieldCheck, UserCircle2, Building2, ArrowRight } from 'lucide-react'
+import { ShieldCheck, UserCircle2, Building2, ArrowRight, UserPlus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 
 export default function LoginPage() {
   const router = useRouter()
   const { toast } = useToast()
-  const [clinicCode, setClinicCode] = useState('')
+  
+  const [isClientRegister, setIsClientRegister] = useState(false)
   const [isAdminRegister, setIsAdminRegister] = useState(false)
+
+  // Client form state
+  const [clientCode, setClinicCode] = useState('')
+  const [clientName, setClientName] = useState('')
+  const [clientEmail, setClientEmail] = useState('')
+  const [clientBirthday, setClientBirthday] = useState('')
 
   const handleClientLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!clinicCode) {
+    if (!clientCode) {
       toast({ variant: "destructive", title: "Código requerido", description: "Introduce el código de tu clínica para continuar." })
       return
     }
-    // Simulación de validación: En una app real aquí verificaríamos contra base de datos
     router.push('/dashboard')
     toast({ title: "Bienvenido", description: "Has accedido correctamente a tu panel de salud." })
+  }
+
+  const handleClientRegister = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!clientCode || !clientEmail || !clientName) {
+      toast({ variant: "destructive", title: "Datos incompletos", description: "Por favor, rellena todos los campos obligatorios." })
+      return
+    }
+    // En una app real, aquí se crearía el usuario en Firebase vinculado a la clínica
+    toast({ 
+      title: "Cuenta creada", 
+      description: `¡Bienvenido ${clientName}! Tu cuenta ha sido vinculada a la clínica ${clientCode}.` 
+    })
+    router.push('/dashboard')
   }
 
   return (
@@ -52,35 +72,93 @@ export default function LoginPage() {
             </TabsList>
 
             <TabsContent value="client" className="space-y-4">
-              <form onSubmit={handleClientLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="clinic-code" className="font-bold">Código de tu Clínica</Label>
-                  <Input 
-                    id="clinic-code" 
-                    placeholder="Ej: FISIKO-2025" 
-                    value={clinicCode}
-                    onChange={(e) => setClinicCode(e.target.value.toUpperCase())}
-                    className="h-12 text-center text-lg font-black tracking-widest uppercase border-2 focus:border-primary" 
-                  />
-                  <p className="text-[10px] text-muted-foreground text-center">Pide el código en la recepción de tu centro para vincular tu cuenta.</p>
-                </div>
-                <Button type="submit" className="w-full text-lg h-12 font-black shadow-lg">
-                  Entrar a mi Panel
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </form>
+              {!isClientRegister ? (
+                <form onSubmit={handleClientLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="clinic-code" className="font-bold">Código de tu Clínica</Label>
+                    <Input 
+                      id="clinic-code" 
+                      placeholder="Ej: FISIKO-2025" 
+                      value={clientCode}
+                      onChange={(e) => setClinicCode(e.target.value.toUpperCase())}
+                      className="h-12 text-center text-lg font-black tracking-widest uppercase border-2 focus:border-primary" 
+                    />
+                    <p className="text-[10px] text-muted-foreground text-center">Introduce el código que te dio tu profesional.</p>
+                  </div>
+                  <Button type="submit" className="w-full text-lg h-12 font-black shadow-lg">
+                    Entrar a mi Panel
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    className="w-full text-xs" 
+                    onClick={() => setIsClientRegister(true)}
+                  >
+                    ¿Eres nuevo? Regístrate aquí
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={handleClientRegister} className="space-y-3 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="space-y-1">
+                    <Label className="font-bold text-xs">Nombre Completo</Label>
+                    <Input 
+                      placeholder="Ej: Juan Pérez" 
+                      value={clientName} 
+                      onChange={(e) => setClientName(e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="font-bold text-xs">Correo Electrónico</Label>
+                    <Input 
+                      type="email" 
+                      placeholder="tu@email.com" 
+                      value={clientEmail} 
+                      onChange={(e) => setClientEmail(e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="font-bold text-xs">Cumpleaños</Label>
+                      <Input 
+                        type="date" 
+                        value={clientBirthday} 
+                        onChange={(e) => setClientBirthday(e.target.value)}
+                        required 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="font-bold text-xs">Código Clínica</Label>
+                      <Input 
+                        placeholder="FISIKO-XXX" 
+                        value={clientCode} 
+                        onChange={(e) => setClinicCode(e.target.value.toUpperCase())}
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full h-12 font-bold mt-2">
+                    <UserPlus className="mr-2 h-5 w-5" />
+                    Crear mi Cuenta
+                  </Button>
+                  <Button variant="ghost" className="w-full text-xs" onClick={() => setIsClientRegister(false)}>
+                    Volver al login
+                  </Button>
+                </form>
+              )}
             </TabsContent>
 
             <TabsContent value="admin" className="space-y-4">
-              <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl mb-4">
-                <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase mb-1">
-                  <Building2 className="h-4 w-4" /> Acceso Profesional
-                </div>
-                <p className="text-[10px] text-muted-foreground">Gestiona tus pacientes, calendarios y facturación en un solo lugar.</p>
-              </div>
-              
               {!isAdminRegister ? (
                 <div className="space-y-3">
+                  <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl mb-2">
+                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase mb-1">
+                      <Building2 className="h-4 w-4" /> Gestión Profesional
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">Panel para fisioterapeutas y administradores de centros.</p>
+                  </div>
                   <Button asChild variant="default" className="w-full h-12 font-bold shadow-md">
                     <Link href="/admin">Entrar como Administrador</Link>
                   </Button>
